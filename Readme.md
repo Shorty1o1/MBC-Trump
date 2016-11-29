@@ -39,9 +39,9 @@ Player
 ```
 
 # Glossar
-* Session: Client which is playing Media
 * Server: Raspberry Pi
 * Client
+    * Session: Client which is playing and controlling Media
     * Master: Session-Holder
     * Slave: Client which listens to a Master's session
 
