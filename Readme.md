@@ -57,5 +57,5 @@ Comments, names, etc. in English
 ## Link
 [Trello](https://trello.com/b/LazqDRY6/trump)    
 ## Trello Card Numbers (Browser Addon)
-[Firefox](https://addons.mozilla.org/en-US/firefox/addon/trello-card-numbers/)
-[Chrome](https://chrome.google.com/webstore/detail/trello-card-numbers/kadpkdielickimifpinkknemjdipghaf)
+*[Firefox](https://addons.mozilla.org/en-US/firefox/addon/trello-card-numbers/)
+*[Chrome](https://chrome.google.com/webstore/detail/trello-card-numbers/kadpkdielickimifpinkknemjdipghaf)
