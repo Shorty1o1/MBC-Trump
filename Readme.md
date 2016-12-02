@@ -46,6 +46,13 @@ Player
     * Master: Client which is controlling media (Gets a Session-ID from Server)
     * Slave:  Client which is playing media (Connects to a specific Session-ID from a list provided by the server)
 
+# Workflow
+## Github
+Commit-Messages in English
+## Coding Style
+[w3schools](http://www.w3schools.com/js/js_conventions.asp)
+Comments, names, etc. in English    
+    
 # Trello
 ## Link
 [Trello](https://trello.com/b/LazqDRY6/trump)    
