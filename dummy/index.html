@@ -1,0 +1,105 @@
+<html>
+<head>
+<script>
+
+var buffer = null;
+var buffer2 = null;
+// Fix up prefixing
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var context = new AudioContext();
+
+function readFile(e){
+var elem = document.getElementById('file-input');
+var file = e.target.files[0];
+ if (!file) {
+    console.log("no file");
+   return;
+ }
+ var reader = new FileReader();
+ reader.onload = function(e){
+    
+    console.log("finished"); 
+	var arrBuffer1 = getArrayBuffer(reader,0,(50 * 1024 * 3));
+	var arrBuffer2 = getArrayBuffer(reader,(50 * 1024 * 3),(50 * 1024 * 3));
+    context.decodeAudioData(arrBuffer1, function(decodedData) {
+        buffer = decodedData;
+        console.log("ready");
+		console.log(buffer);
+		context.decodeAudioData(arrBuffer2, function(decodedData2) {
+			buffer2 = decodedData2;
+			console.log("ready2");
+			console.log(buffer2);
+		});
+    });
+ }
+ reader.readAsBinaryString(file);
+}
+function ready(){
+    var elem = document.getElementById('file-input');
+    if(elem){
+        elem.addEventListener('change', readFile, false);
+    }
+}
+// Fix up prefixing
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var context = new AudioContext();
+var cSource=null;
+function playSound() {
+    var time = document.getElementById('time').value;
+    var source = context.createBufferSource(); // creates a sound source
+	addMusicEndListener(source);
+    source.buffer = buffer;                    // tell the source which sound to play
+    source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+    source.start(0,time);                           // play the source now                                             // note: on older systems, may have to use deprecated noteOn(time);
+    cSource=source;
+}
+
+function playSound2() {
+    var time = document.getElementById('time').value;
+    var source = context.createBufferSource(); // creates a sound source
+    source.buffer = buffer2;                    // tell the source which sound to play
+    source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+    source.start(0,time);                           // play the source now                                             // note: on older systems, may have to use deprecated noteOn(time);
+    cSource=source;
+}
+
+function addMusicEndListener(source) {
+	source.addEventListener("ended",function() {
+		console.log("music ended");
+		playSound2();
+	});
+}
+
+
+function getArrayBuffer(reader, start, end){
+	var byteArray=[]; 
+    var len = end
+    for(i=start;i<len;i++){
+    var code = reader.result[i].charCodeAt(0);
+    byteArray[i] = code;
+    }
+    
+    var lengthOfByte = len;
+    var arrBuffer = new ArrayBuffer(lengthOfByte);
+    var int8 = new Int8Array(arrBuffer);
+    for(i=0;i<lengthOfByte;i++){
+        int8[i] = byteArray[i];
+    }
+	return arrBuffer;
+}
+
+function stopSound(){
+cSource.stop();
+}
+</script>
+</head>
+<body onload="ready()">
+<input type="file" id="file-input" />
+<h3>Contents of the file:</h3>
+<pre id="file-content"></pre>
+<input type="Button" value="Play" onclick="playSound()">
+<input type="Button" value="Stop" onclick="stopSound()">
+<input type="text" id="time" value="0">
+</body>
+
+</html>

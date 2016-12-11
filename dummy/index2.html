@@ -1,0 +1,76 @@
+<html>
+<head>
+<script>
+var audioElem = null;
+var debug=true;
+function init(){
+	audioElem = document.createElement('audio');
+}
+init();
+log("init done");
+
+//var serverAddr = "localhost";
+var serverAddr = window.location.hostname + ":" + window.location.port;
+
+var connection = new WebSocket('ws://'+serverAddr, 'echo-protocol');
+connection.onmessage = function(message){
+	console.log(message);
+	if(message.data) {
+		log(message.data);
+		var json = JSON.parse(message.data);
+		var src = json.source;
+		var ti = json.time;
+		var type = json.type;
+		if(type === "init") {
+			log("start");
+			start(src,ti);
+			connection.send("sync");
+		 }
+		if(type === "sync"){
+			sync(src,ti);
+		}
+	}
+}
+
+connection.onopen = function(event){
+	log("connection established");
+	connection.send("init");
+}
+
+function start(source,time){
+	// var audioSourceFile = 'http://192.168.178.37:8080/dusche.mp3';
+	audioElem.setAttribute('src', source);
+
+	//var audioTime = 80;
+	audioElem.play();
+	audioElem.currentTime=time;
+	console.log(audioElem.currentTime);
+}
+
+function sync(source,time){
+	log("sync");
+	var audioTime = audioElem.currentTime;
+	log("server time: " + time);
+	log("client time: " + audioTime);
+	var diff = time - audioTime;
+	log("diff: " + diff);
+	var ms = diff * 1000;
+	log("ms: " + ms);
+	if(ms > 80){
+		audioElem.currentTime = time;
+		log("corrected time");
+	}
+	connection.send("sync");
+}
+
+function log(message){
+	if(debug) {
+		console.log(message);
+	}
+}
+
+</script>
+</head>
+<body>
+</body>
+</html>
