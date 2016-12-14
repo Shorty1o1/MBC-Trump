@@ -1,0 +1,32 @@
+<html>
+<head>
+<script src="log.js"></script>
+<script src="messageFactory.js"></script>
+<script src="player.js"></script>
+<script src="wsocket.js"></script>
+<script src="client.js"></script>
+<script src="platform.js"></script>
+<script>
+var debug = true;
+var client = new Client();
+var platform = new Platform();
+window.onload = function(){
+  switch (true) {
+    case platform.isAndroid:
+      log("index.html","i am android");
+      client.prepareMobile();
+      break;
+    case platform.isWindows:
+      log("index.html","i am windows");
+      break;
+    case platform.isLinux:
+      log("index.html","i am linux");
+      break;
+    default:
+      log("index.html", "Device is not supported");
+  }
+}
+</script>
+</head>
+<body></body>
+</html>
