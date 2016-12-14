@@ -16,7 +16,7 @@ var Platform = function() {
     init();
 
     this.isAndroid = function() {
-        return android;
+        return true;
     }
 
     this.isWindows = function() {

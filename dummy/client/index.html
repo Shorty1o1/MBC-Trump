@@ -12,14 +12,14 @@ var client = new Client();
 var platform = new Platform();
 window.onload = function(){
   switch (true) {
-    case platform.isAndroid:
+    case platform.isAndroid():
       log("index.html","i am android");
       client.prepareMobile();
       break;
-    case platform.isWindows:
+    case platform.isWindows():
       log("index.html","i am windows");
       break;
-    case platform.isLinux:
+    case platform.isLinux():
       log("index.html","i am linux");
       break;
     default:

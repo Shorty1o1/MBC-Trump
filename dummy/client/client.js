@@ -1,6 +1,8 @@
 var Client = function() {
     const INIT = "init";
     const SYNC = "sync";
+    const PLAY = "play";
+    const STOP = "stop";
     var server = window.location.hostname + ":" + window.location.port;
     var wsocket = new WSocket(server);
     var player = new Player();
@@ -9,6 +11,7 @@ var Client = function() {
     var source = null;
     var currentTime = 0;
     var self = this; // prevent scoping problems
+    var playerStatus = STOP;
 
     function init() {
         log("Client", "init Client");
@@ -16,6 +19,9 @@ var Client = function() {
             mapMessages(message);
         });
         log("Client", "callback for receiving messages added");
+
+        player.createAudioElem();
+        log("Client", "Audio element created");
 
         wsocket.addConnectionOpenCallback(function(event) {
             log("Client", "Connection to server established");
@@ -31,24 +37,31 @@ var Client = function() {
     this.prepareMobile = function() {
         player.createPlayButton();
         player.addCallbackForPlayback(function() {
-            startPlayback();
+            var syncMessage = messageFactory.createSyncMessage();
+            wsocket.send(syncMessage);
+            self.startPlayback();
         });
         log("Client", "play button created");
     }
 
     this.startPlayback = function() {
         if (source) {
-            player.createAudioElem();
-            log("Client", "Audio element created");
             player.setSource(source);
             log("Client", "source set");
             player.setTime(currentTime);
             log("Client", "time set");
             player.start();
+            playerStatus = PLAY;
             log("Client", "playback is started");
         } else {
             log("Client", "no source is set");
         }
+    }
+
+    this.stop = function() {
+        player.stop();
+        playerStatus = STOP;
+        log("Client", "music stopped");
     }
 
     function mapMessages(message) {
@@ -61,15 +74,19 @@ var Client = function() {
                         log("Client", "INIT Message");
                         source = messageObj.source;
                         currentTime = messageObj.time;
-                        self.startPlayback();
-                        var syncMessage = messageFactory.createSyncMessage();
-                        wsocket.send(syncMessage);
+                        if (!platform.isAndroid) {
+                            self.startPlayback();
+                            var syncMessage = messageFactory.createSyncMessage();
+                            wsocket.send(syncMessage);
+                        }
                         break;
                     case SYNC:
                         log("Client", "SYCN Message");
                         regulatePlayer(messageObj);
-                        var syncMessage = messageFactory.createSyncMessage();
-                        wsocket.send(syncMessage);
+                        if (playerStatus.indexOf(STOP) == -1) {
+                            var syncMessage = messageFactory.createSyncMessage();
+                            wsocket.send(syncMessage);
+                        }
                         break;
                     default:
                         log("Client", "Message type not supported");

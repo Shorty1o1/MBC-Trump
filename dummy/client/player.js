@@ -37,6 +37,9 @@ var Player = function() {
         } else {
             log("Player", "button not created");
         }
+    }
 
+    this.stop = function() {
+        log("Player", "pause");
     }
 }
