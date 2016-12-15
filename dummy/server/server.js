@@ -3,14 +3,7 @@ var debug = true;
 
 var os = require('os');
 var ifaces = os.networkInterfaces();
-var ip;
-if (ifaces.wlan0 && ifaces.wlan0[0]) {
-    ip = ifaces.wlan0[0].address;
-}
-
-if (ifaces.eth0 && ifaces.eth0[0]) {
-    ip = ifaces.eth0[0].address;
-}
+var ip="192.168.178.48";
 
 
 log("Servers ip :: " + ip);

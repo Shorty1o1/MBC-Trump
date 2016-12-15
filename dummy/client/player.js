@@ -1,45 +1,63 @@
-var Player = function() {
+var Player = function () {
+    const PLAY = "play";
+    const PAUSE = "pause";
     var audio;
-    var button;
-    this.createAudioElem = function() {
+    var playButton;
+    var pauseButton;
+    var state = PAUSE;
+    this.createAudioElem = function () {
         audio = document.createElement('audio');
         log("Player", "'audio' element created");
     }
 
-    this.start = function() {
-        var startTime = audio.currentTime;
+    this.getState = function () {
+        return state;
+    }
+
+    this.start = function () {
         audio.play();
-        log("Player", "audio started at " + startTime);
+        state = PLAY;
+        log("Player", "audio started at " + audio.currentTime);
     }
 
-    this.setSource = function(source) {
+    this.setSource = function (source) {
         audio.setAttribute('src', source);
+        log("Player", "source set to " + source);
     }
 
-    this.setTime = function(time) {
+    this.setTime = function (time) {
         var before = audio.currentTime;
         audio.currentTime = time;
         log("Player", "audio time from " + before + " is set to " + time);
     }
 
-    this.createPlayButton = function() {
-        button = document.createElement("button");
+    this.createPlayButton = function () {
+        playButton = document.createElement("button");
         var textNode = document.createTextNode("Play the Music");
-        button.appendChild(textNode);
-        document.body.appendChild(button);
-        log("Player", "Button'created");
+        playButton.appendChild(textNode);
+        document.body.appendChild(playButton);
+        log("Player", "play button'created");
     }
 
-    this.addCallbackForPlayback = function(callback) {
-        if (button) {
-            button.addEventListener('click', callback);
-            log("Player", "callback added");
-        } else {
-            log("Player", "button not created");
-        }
+    this.createPauseButton = function () {
+        pauseButton = document.createElement("button");
+        var textNode = document.createTextNode("pause");
+        pauseButton.appendChild(textNode);
+        document.body.appendChild(pauseButton);
+        log("Player", "pause button'created");
     }
 
-    this.stop = function() {
+    this.addCallbackForPause = function (callback) {
+        pauseButton.addEventListener('click', callback);
+    }
+
+    this.addCallbackForPlayback = function (callback) {
+        playButton.addEventListener('click', callback);
+    }
+
+    this.pause = function () {
+        audio.pause();
+        state = PAUSE;
         log("Player", "pause");
     }
 }

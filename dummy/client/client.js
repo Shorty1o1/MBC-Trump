@@ -1,92 +1,83 @@
-var Client = function() {
+var Client = function () {
     const INIT = "init";
     const SYNC = "sync";
     const PLAY = "play";
-    const STOP = "stop";
     var server = window.location.hostname + ":" + window.location.port;
     var wsocket = new WSocket(server);
     var player = new Player();
     var messageFactory = new MessageFactory();
     var platform = new Platform();
     var source = null;
-    var currentTime = 0;
     var self = this; // prevent scoping problems
-    var playerStatus = STOP;
 
-    function init() {
+    function initWSocket() {
         log("Client", "init Client");
-        wsocket.addReceiveCallback(function(message) {
-            mapMessages(message);
+        wsocket.addReceiveCallback(function (message) {
+            handleMessages(message);
         });
         log("Client", "callback for receiving messages added");
 
+        wsocket.addConnectionOpenCallback(function (event) {
+            log("Client", "Connection to server established");
+            sendInit();
+            log("Client", "init message sent");
+        });
+    }
+
+    this.initClient = function () {
+        initWSocket();
+    }
+
+    function initAudio(src, time) {
         player.createAudioElem();
         log("Client", "Audio element created");
 
-        wsocket.addConnectionOpenCallback(function(event) {
-            log("Client", "Connection to server established");
-            var initMessage = messageFactory.createInitMessage();
-            log("Client", "sending init to " + server);
-            wsocket.send(initMessage);
-            log("Client", "init message sent: " + initMessage);
-        });
-    }
-
-    init();
-
-    this.prepareMobile = function() {
         player.createPlayButton();
-        player.addCallbackForPlayback(function() {
-            var syncMessage = messageFactory.createSyncMessage();
-            wsocket.send(syncMessage);
+        log("Client", "Play button created");
+
+        player.createPauseButton();
+        log("Client", "Pause button created");
+
+        player.setSource(src);
+        log("Client", "source is set");
+
+        player.setTime(time);
+        log("Client", "time is set");
+
+        player.addCallbackForPlayback(function () {
             self.startPlayback();
         });
+
+        player.addCallbackForPause(function () {
+            self.pause();
+        });
+
         log("Client", "play button created");
+
     }
 
-    this.startPlayback = function() {
-        if (source) {
-            player.setSource(source);
-            log("Client", "source set");
-            player.setTime(currentTime);
-            log("Client", "time set");
-            player.start();
-            playerStatus = PLAY;
-            log("Client", "playback is started");
-        } else {
-            log("Client", "no source is set");
-        }
+    this.startPlayback = function () {
+        player.start();
+        sendSync();
+        log("Client", "playback is started");
     }
 
-    this.stop = function() {
-        player.stop();
-        playerStatus = STOP;
-        log("Client", "music stopped");
+    this.pause = function () {
+        player.pause();
+        log("Client", "music is paused");
     }
 
-    function mapMessages(message) {
+    function handleMessages(message) {
         if (message.data) {
             log("Client", "Got message " + message.data);
             try {
                 var messageObj = messageFactory.getMessage(message.data);
                 switch (messageObj.type) {
                     case INIT:
-                        log("Client", "INIT Message");
-                        source = messageObj.source;
-                        currentTime = messageObj.time;
-                        if (!platform.isAndroid) {
-                            self.startPlayback();
-                            var syncMessage = messageFactory.createSyncMessage();
-                            wsocket.send(syncMessage);
-                        }
+                        handleInitMessage(messageObj);
                         break;
                     case SYNC:
-                        log("Client", "SYCN Message");
-                        regulatePlayer(messageObj);
-                        if (playerStatus.indexOf(STOP) == -1) {
-                            var syncMessage = messageFactory.createSyncMessage();
-                            wsocket.send(syncMessage);
-                        }
+                        handleSyncMessage(messageObj);
                         break;
                     default:
                         log("Client", "Message type not supported");
@@ -99,31 +90,54 @@ var Client = function() {
         }
     }
 
-    function regulatePlayer(message) {
+    function handleInitMessage(messageObj) {
+        log("Client", "INIT Message");
+        initAudio(messageObj.source, messageObj.time);
+    }
+
+    function handleSyncMessage(messageObj) {
+        log("Client", "SYCN Message");
+        if (player.getState() === PLAY) {
+            syncPlayer(messageObj);
+            sendSync();
+        }
+    }
+
+    function sendSync() {
+        var syncMessage = messageFactory.createSyncMessage();
+        wsocket.send(syncMessage);
+    }
+
+    function sendInit() {
+        var initMessage = messageFactory.createInitMessage();
+        wsocket.send(initMessage);
+    }
+
+    function syncPlayer(messageObj) {
         //OF TODO skip, set source etc..
 
         //OF refactor this...
-        var audioTime = currentTime;
-        var time = message.time;
-        log("Client", "server time: " + time);
-        log("Client", "client time: " + audioTime);
-        var diff = time - audioTime;
-        log("Client", "diff: " + diff);
-        var ms = diff * 1000;
-        log("Client", "ms: " + ms);
-        if (ms > 80 && !platform.isAndroid()) {
-            currentTime = time;
-            player.setTime(currentTime);
-            log("Client", "corrected time");
-        }
-
-        if (platform.isAndroid() && ms > 100) {
-            currentTime = time + (24 / 1000);
-            player.setTime(currentTime);
-
-            //OF this was for logging
-            // var logText = document.getElementById("myText");
-            // logText.innerHTML += ms + "\n";
-        }
+        // var audioTime = currentTime;
+        // var time = message.time;
+        // log("Client", "server time: " + time);
+        // log("Client", "client time: " + audioTime);
+        // var diff = time - audioTime;
+        // log("Client", "diff: " + diff);
+        // var ms = diff * 1000;
+        // log("Client", "ms: " + ms);
+        // if (ms > 80 && !platform.isAndroid()) {
+        //     currentTime = time;
+        //     player.setTime(currentTime);
+        //     log("Client", "corrected time");
+        // }
+        //
+        // if (platform.isAndroid() && ms > 100) {
+        //     currentTime = time + (24 / 1000);
+        //     player.setTime(currentTime);
+        //
+        //     //OF this was for logging
+        //     // var logText = document.getElementById("myText");
+        //     // logText.innerHTML += ms + "\n";
+        // }
     }
 }
