@@ -70,6 +70,7 @@ wsServer.on('request', function(request) {
             var json = {};
             json.type = "rtt";
             json.sentTime = clientObj.sentTime;
+            json.serverNow = Date.now();
             con.send(JSON.stringify(json));
         } else {
             log("got error");

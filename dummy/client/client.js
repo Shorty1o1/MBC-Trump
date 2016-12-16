@@ -11,6 +11,7 @@ var Client = function() {
     var source = null;
     var self = this; // prevent scoping problems
     var rtt;
+    var sync = false;
 
     function initWSocket() {
         log("Client", "init Client");
@@ -145,12 +146,15 @@ var Client = function() {
         var diff = serverTime - clientTime;
 
         var ms = diff * 1000;
+        sendRTT();
 
-        if (ms > 80) {
-            player.setTime(serverTime);
+        console.log("MS: " + ms);
+        console.log("Server: " + serverTime);
+        console.log("Client: " + clientTime);
+
+        if (ms > 50) {
+            player.setTime(serverTime + (rtt / 1000) + 0.05);
             console.log("correct " + ms);
         }
-
-
     }
 }
