@@ -51,7 +51,7 @@ wsServer.on('request', function(request) {
             log("got init");
             var json = {};
             json.source = httpAddr + "/dusche.mp3";
-            json.time = passed + (24 / 1000);
+            json.time = passed;
             json.type = "init";
             con.send(JSON.stringify(json));
         } else if (message.utf8Data === "{\"type\":\"sync\"}") {
@@ -60,7 +60,7 @@ wsServer.on('request', function(request) {
             var json = {};
             json.source = httpAddr + "/dusche.mp3";
             var passed = (Date.now() - timeInMs) / 1000;
-            json.time = passed + (24 / 1000);
+            json.time = passed;
             json.type = "sync";
             con.send(JSON.stringify(json));
         } else {
