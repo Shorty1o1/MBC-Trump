@@ -1,6 +1,7 @@
 var Client = function() {
     const INIT = "init";
     const SYNC = "sync";
+    const RTT = "rtt";
     const PLAY = "play";
     var server = window.location.hostname + ":" + window.location.port;
     var wsocket = new WSocket(server);
@@ -9,6 +10,7 @@ var Client = function() {
     var platform = new Platform();
     var source = null;
     var self = this; // prevent scoping problems
+    var rtt;
 
     function initWSocket() {
         log("Client", "init Client");
@@ -79,6 +81,8 @@ var Client = function() {
                     case SYNC:
                         handleSyncMessage(messageObj);
                         break;
+                    case RTT:
+                        handleRTTMessage(messageObj);
                     default:
                         log("Client", "Message type not supported");
                 }
@@ -90,8 +94,16 @@ var Client = function() {
         }
     }
 
+    function handleRTTMessage(messageObj) {
+        var sentTime = messageObj.sentTime;
+        var receivedTime = Date.now();
+        rtt = ((receivedTime - sentTime) / 2);
+        console.log("RTT: " + rtt + "ms");
+    }
+
     function handleInitMessage(messageObj) {
         log("Client", "INIT Message");
+        sendRTT();
         initAudio(messageObj.source, messageObj.time);
     }
 
@@ -113,6 +125,11 @@ var Client = function() {
         wsocket.send(initMessage);
     }
 
+    function sendRTT() {
+        var rttMessage = messageFactory.createRTTMessage();
+        wsocket.send(rttMessage);
+    }
+
     function logAndroid(message) {
         document.body.innerHTML += message + "\n";
     }
@@ -131,6 +148,7 @@ var Client = function() {
 
         if (ms > 80) {
             player.setTime(serverTime);
+            console.log("correct " + ms);
         }
 
 

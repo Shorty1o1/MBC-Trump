@@ -3,7 +3,7 @@ var debug = true;
 
 var os = require('os');
 var ifaces = os.networkInterfaces();
-var ip = "141.22.79.202";
+var ip = "192.168.178.36";
 
 log("Servers ip :: " + ip);
 var port = 8080;
@@ -61,6 +61,15 @@ wsServer.on('request', function(request) {
             var passed = (Date.now() - timeInMs) / 1000;
             json.time = passed;
             json.type = "sync";
+            con.send(JSON.stringify(json));
+        } else if (message.utf8Data.indexOf("rtt") > -1) {
+            log("rtt");
+
+            var clientObj = JSON.parse(message.utf8Data);
+
+            var json = {};
+            json.type = "rtt";
+            json.sentTime = clientObj.sentTime;
             con.send(JSON.stringify(json));
         } else {
             log("got error");

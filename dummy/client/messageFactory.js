@@ -16,4 +16,12 @@ var MessageFactory = function() {
         //OF maybe add some other fields here;
         return JSON.stringify(json);
     }
+
+    this.createRTTMessage = function() {
+        var json = {};
+        json.type = "rtt";
+        json.sentTime = Date.now();
+        //OF maybe add some other fields here;
+        return JSON.stringify(json);
+    }
 }
