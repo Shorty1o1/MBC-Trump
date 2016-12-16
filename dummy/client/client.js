@@ -1,4 +1,4 @@
-var Client = function () {
+var Client = function() {
     const INIT = "init";
     const SYNC = "sync";
     const PLAY = "play";
@@ -12,19 +12,19 @@ var Client = function () {
 
     function initWSocket() {
         log("Client", "init Client");
-        wsocket.addReceiveCallback(function (message) {
+        wsocket.addReceiveCallback(function(message) {
             handleMessages(message);
         });
         log("Client", "callback for receiving messages added");
 
-        wsocket.addConnectionOpenCallback(function (event) {
+        wsocket.addConnectionOpenCallback(function(event) {
             log("Client", "Connection to server established");
             sendInit();
             log("Client", "init message sent");
         });
     }
 
-    this.initClient = function () {
+    this.initClient = function() {
         initWSocket();
     }
 
@@ -44,11 +44,11 @@ var Client = function () {
         player.setTime(time);
         log("Client", "time is set");
 
-        player.addCallbackForPlayback(function () {
+        player.addCallbackForPlayback(function() {
             self.startPlayback();
         });
 
-        player.addCallbackForPause(function () {
+        player.addCallbackForPause(function() {
             self.pause();
         });
 
@@ -56,13 +56,13 @@ var Client = function () {
 
     }
 
-    this.startPlayback = function () {
+    this.startPlayback = function() {
         player.start();
         sendSync();
         log("Client", "playback is started");
     }
 
-    this.pause = function () {
+    this.pause = function() {
         player.pause();
         log("Client", "music is paused");
     }
@@ -117,27 +117,22 @@ var Client = function () {
         //OF TODO skip, set source etc..
 
         //OF refactor this...
-        // var audioTime = currentTime;
-        // var time = message.time;
-        // log("Client", "server time: " + time);
-        // log("Client", "client time: " + audioTime);
-        // var diff = time - audioTime;
+        // var clientTime = player.currentTime;
+        // var serverTime = message.time;
+        // log("Client", "server time: " + serverTime);
+        // log("Client", "client time: " + clientTime);
+        // var diff = serverTime - clientTime;
         // log("Client", "diff: " + diff);
         // var ms = diff * 1000;
         // log("Client", "ms: " + ms);
         // if (ms > 80 && !platform.isAndroid()) {
-        //     currentTime = time;
-        //     player.setTime(currentTime);
+        //     player.setTime(serverTime);
         //     log("Client", "corrected time");
         // }
         //
         // if (platform.isAndroid() && ms > 100) {
-        //     currentTime = time + (24 / 1000);
+        //     var time = serverTime + (24 / 1000);
         //     player.setTime(currentTime);
-        //
-        //     //OF this was for logging
-        //     // var logText = document.getElementById("myText");
-        //     // logText.innerHTML += ms + "\n";
         // }
     }
 }
