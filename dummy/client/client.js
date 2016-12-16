@@ -92,7 +92,7 @@ var Client = function() {
 
     function handleInitMessage(messageObj) {
         log("Client", "INIT Message");
-        initAudio(messageObj.source, messageObj.time);
+        initAudio(messageObj.source, 5.123);
     }
 
     function handleSyncMessage(messageObj) {
@@ -113,26 +113,19 @@ var Client = function() {
         wsocket.send(initMessage);
     }
 
-    function syncPlayer(messageObj) {
-        //OF TODO skip, set source etc..
+    function logAndroid(message) {
+        document.body.innerHTML += message + "\n";
+    }
 
+    function syncPlayer(messageObj) {
         //OF refactor this...
-        // var clientTime = player.currentTime;
-        // var serverTime = message.time;
-        // log("Client", "server time: " + serverTime);
-        // log("Client", "client time: " + clientTime);
-        // var diff = serverTime - clientTime;
-        // log("Client", "diff: " + diff);
-        // var ms = diff * 1000;
-        // log("Client", "ms: " + ms);
-        // if (ms > 80 && !platform.isAndroid()) {
-        //     player.setTime(serverTime);
-        //     log("Client", "corrected time");
-        // }
-        //
-        // if (platform.isAndroid() && ms > 100) {
-        //     var time = serverTime + (24 / 1000);
-        //     player.setTime(currentTime);
-        // }
+        var clientTime = player.getCurrentTime();
+        var serverTime = messageObj.time;
+
+        var diff = serverTime - clientTime;
+
+        var ms = diff * 1000;
+
+        logAndroid(ms);
     }
 }
