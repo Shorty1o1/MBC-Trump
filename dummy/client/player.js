@@ -62,6 +62,9 @@ var Player = function() {
     }
 
     this.getCurrentTime = function() {
+
+        // var time = audio.currentTime;
+        // document.body.innerHTML += time + "\n";
         return audio.currentTime;
     }
 }

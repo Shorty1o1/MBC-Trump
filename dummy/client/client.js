@@ -92,7 +92,7 @@ var Client = function() {
 
     function handleInitMessage(messageObj) {
         log("Client", "INIT Message");
-        initAudio(messageObj.source, 5.123);
+        initAudio(messageObj.source, messageObj.time);
     }
 
     function handleSyncMessage(messageObj) {
@@ -122,10 +122,17 @@ var Client = function() {
         var clientTime = player.getCurrentTime();
         var serverTime = messageObj.time;
 
+        log(clientTime + " - Client");
+        log(serverTime + " - Server");
+
         var diff = serverTime - clientTime;
 
         var ms = diff * 1000;
 
-        logAndroid(ms);
+        if (ms > 80) {
+            player.setTime(serverTime);
+        }
+
+
     }
 }
