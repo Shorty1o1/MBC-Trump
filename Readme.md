@@ -38,6 +38,11 @@ Player
 ...                        ~:  ::,.       ... ,.,~   .:. 
 ```
 
+# NPM-Packages installieren
+`` $ npm install finalhandler``
+`` $ npm install serve-static ``
+`` $ npm install websocket ``
+
 # Glossar
 * Server: Raspberry Pi
     * Contains playlist(s) and it's files
