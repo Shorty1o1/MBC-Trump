@@ -4,7 +4,6 @@
     <h3>Title!</h3>
     <hr />
     <div class="flexbox">
-
         <div id="box1" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Artist</h4>
@@ -37,14 +36,14 @@
             <div class="panel-heading">
                 <h4>Song</h4>
             </div>
-               <div class="list-group eintraege">
+		    <div class="list-group eintraege">
                 <div *ngFor="let artist of list;" >                     
                     <div ngSwitch="{{artist.name}}" >
                         <div *ngSwitchCase="getArtist()">
 							<div *ngFor="let album of generateArray(artist.albums);">  								
 								<div ngSwitch="{{album.title}}">	
 									<div *ngSwitchCase="getAlbum()">
-										<div class="list-group-item" *ngFor="let song of generateArray(album.songs);">  
+										<div class="test" class="list-group-item" *ngFor="let song of generateArray(album.songs);">  
 											{{song.title}} 
 										</div> 												 
 									</div>

@@ -4,7 +4,7 @@ var selectedArtist;
 var selectedAlbum;
 
 @Component({
-    selector: 'app-about',
+    selector: 'app-chooser',
     templateUrl: 'app/chooser/chooser.html'   
     styleUrls: ['app/chooser/panelStyle.css']
 })
@@ -34,7 +34,7 @@ export class ChooserComponent {
 	}	
     
 	getAlbum() : string {
-		console.log("Ge3tAlbum: " + selectedAlbum);
+		console.log("GetAlbum: " + selectedAlbum);
         return selectedAlbum;
 	}
 
