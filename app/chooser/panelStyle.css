@@ -1,0 +1,22 @@
+div.flexbox {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+div.panel-wizard {
+    flex: 1 1 auto;
+}
+
+.flexbox .col-lg-3{    
+    padding-left: 0;
+    padding-right:0;
+}
+
+.eintraege {    
+  max-height: 500;
+  overflow-y: scroll;
+}
