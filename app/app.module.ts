@@ -9,7 +9,7 @@ import { routing }  from './app.routing';
 import { HttpModule }      from '@angular/http';
 
 @NgModule({
-  imports:      [ BrowserModule, routing, HttpModule  ], //other modules the app depends on
+  imports:      [ BrowserModule, routing, HttpModule ], //other modules the app depends on
   declarations: [ AppComponent, AboutComponent, ChooserComponent, HomeComponent ], // declare all derectives and components
   bootstrap : [ AppComponent ] // root component to bootstarp
 })

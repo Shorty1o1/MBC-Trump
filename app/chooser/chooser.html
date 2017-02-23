@@ -3,56 +3,38 @@
 <div class="container-fluid">
     <h3>Title!</h3>
     <hr />
+	
     <div class="flexbox">
         <div id="box1" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Artist</h4>
             </div>            
             <div class="list-group eintraege">
-                <div class="list-group-item" *ngFor="let artist of list;" (click)="setArtist(artist.name)" >
+                <div class="list-group-item" *ngFor="let artist of artists;" (click)="setArtist(artist)" >
                     <div>{{artist.name}}</div>
                 </div>
             </div>           
         </div>
-
-        <div id="box2" class="panel panel-default panel-wizard col-lg-3">
+		<div id="box2" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Album</h4>
             </div>
             <div class="list-group eintraege">
-                <div *ngFor="let artist of list;" >                     
-                    <div ngSwitch="{{artist.name}}" >
-                        <div *ngSwitchCase="getArtist()">
-                            <div class="list-group-item" *ngFor="let album of generateArray(artist.albums);" (click)="setAlbum(album.title)">  
-                                {{album.title}} 
-                            </div>   
-                         </div>
-                    </div>  
+				<div class="list-group-item" *ngFor="let album of selectedArtist?.albums;" (click)="setAlbum(album)">
+                    <div>{{album.title}}</div>
                 </div>
-            </div>
+            </div>		
         </div>
 
         <div id="box3" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Song</h4>
             </div>
-		    <div class="list-group eintraege">
-                <div *ngFor="let artist of list;" >                     
-                    <div ngSwitch="{{artist.name}}" >
-                        <div *ngSwitchCase="getArtist()">
-							<div *ngFor="let album of generateArray(artist.albums);">  								
-								<div ngSwitch="{{album.title}}">	
-									<div *ngSwitchCase="getAlbum()">
-										<div class="test" class="list-group-item" *ngFor="let song of generateArray(album.songs);">  
-											{{song.title}} 
-										</div> 												 
-									</div>
-                                </div>
-                            </div>                                 
-                        </div>
-                    </div>  
+		     <div class="list-group eintraege">
+				<div class="list-group-item" *ngFor="let song of selectedAlbum?.songs;" (click)="setSong(song)">
+                    <div>{{song.title}}</div>
                 </div>
-            </div>
+            </div>		
         </div>
     </div>
 </div>
