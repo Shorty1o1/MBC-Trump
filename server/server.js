@@ -13,8 +13,9 @@ var httpAddr = "http://" + ip + ":" + port;
 var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
 
-var serve = serveStatic("../");
+var serve = serveStatic(__dirname + "/../");
 var serveMp3 = serveStatic("./");
+
 
 var server = http.createServer(function(req, res) {
     var done = finalhandler(req, res);
@@ -45,33 +46,25 @@ wsServer.on('request', function(request) {
     log("connection accepted");
     con.on('message', function(message) {
         log(message);
-        if (message.utf8Data === "{\"type\":\"init\"}") {
+        messageObj = JSON.parse(message.utf8Data);
+        if (messageObj.type == "song_request") {
             var passed = (Date.now() - timeInMs) / 1000;
-            log("got init");
+            log("song_request");
             var json = {};
             json.source = httpAddr + "/dusche.mp3";
             json.time = passed;
-            json.type = "init";
+            json.type = "song_request";
             con.send(JSON.stringify(json));
-        } else if (message.utf8Data === "{\"type\":\"sync\"}") {
-            //sync
-            log("sync");
+        } else if (messageObj.type == "player_delay") {
+            log("player_delay");
             var json = {};
             json.source = httpAddr + "/dusche.mp3";
-            var passed = (Date.now() - timeInMs) / 1000;
-            json.time = passed;
-            json.type = "sync";
+            json.type = "player_delay";
             con.send(JSON.stringify(json));
-        } else if (message.utf8Data.indexOf("rtt") > -1) {
+        } else if (messageObj.type == "rtt") {           
             log("rtt");
-
-            var clientObj = JSON.parse(message.utf8Data);
-
-            var json = {};
-            json.type = "rtt";
-            json.sentTime = clientObj.sentTime;
-            json.serverNow = Date.now();
-            con.send(JSON.stringify(json));
+            var json = message.utf8Data;
+            con.send(json);
         } else {
             log("got error");
             con.send("wrong message");

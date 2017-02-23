@@ -14,7 +14,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 @NgModule({
   imports:      [ BrowserModule, routing, HttpModule, FormsModule  ], //other modules the app depends on
   declarations: [ AppComponent, AboutComponent, ChooserComponent, HomeComponent ], // declare all derectives and components
-  bootstrap : [ AppComponent ] // root component to bootstarp
-  providers: [    {provide: LocationStrategy, useClass: HashLocationStrategy},  ]
+  bootstrap : [ AppComponent ], // root component to bootstarp
+  providers: [    {provide: LocationStrategy, useClass: HashLocationStrategy}  ]
 })
 export class AppModule { }

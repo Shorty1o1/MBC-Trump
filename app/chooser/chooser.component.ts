@@ -7,11 +7,11 @@ import {Http} from '@angular/http';
     styleUrls: ['app/chooser/panelStyle.css']
 })
 export class ChooserComponent {
-	private artists[] : Artist [];
+	private artists : Artist [];
 	private selectedArtist : Artist;
 	private selectedAlbum : Album;
 	private selectedSong : Song;
-	private newPlayList[] : Song[];
+	private newPlayList : Song[];
 	
 	// Filter muessen initialisiert werden, sonst ist liste am Anfang leer
 	artistFilter = ""; 
@@ -32,9 +32,9 @@ export class ChooserComponent {
 		console.log("SetAlbum: " + album.title)
 		this.selectedAlbum = album;
 		
-	}	
+	}
 	
-	removeSongFromPlaylist(song : Song){
+	removeSongFromPlaylist(song : Song) {
 		console.log("remove")
 		for(var i = 0; i < this.newPlayList.length; i++){
 			console.log("i: " +i)
