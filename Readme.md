@@ -1,9 +1,7 @@
-# single-page-application-angular2
-
-### Quick Setup
-- `$ git clone https://github.com/rahil471/single-page-application-angular2.git`
-- Navigate into the directory using command line interface
+### Initial Setup
 - `$ npm install`
+
+### Start
 - `$ npm start`
 
 ### Full Tutorial

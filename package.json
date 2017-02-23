@@ -5,8 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run tsc:w\" \"node server.js\" ",
-    "lite": "lite-server",
-	"serve": "serve",
     "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
@@ -30,13 +28,13 @@
     "core-js": "^2.4.1",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
-    "serve": "^3.4.1",
+    "serve-static": "^1.11.2",
     "systemjs": "0.19.39",
+    "websocket": "^1.0.24",
     "zone.js": "^0.6.25"
   },
   "devDependencies": {
     "concurrently": "^3.1.0",
-    "live-server": "^1.1.0",
     "typescript": "^2.0.3",
     "typings": "^1.4.0"
   }
