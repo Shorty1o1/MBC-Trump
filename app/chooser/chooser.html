@@ -1,40 +1,82 @@
-<h1>{{welcome}}</h1>
+<h1>Add songs to playlist</h1>
 
 <div class="container-fluid">
-    <h3>Title!</h3>
+
     <hr />
-	
     <div class="flexbox">
-        <div id="box1" class="panel panel-default panel-wizard col-lg-3">
+        <div id="artistBox" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Artist</h4>
-            </div>            
+            </div>            			
+			<input class="form-control" placeholder="Filter Artists" [(ngModel)]="artistFilter">
             <div class="list-group eintraege">
-                <div class="list-group-item" *ngFor="let artist of artists;" (click)="setArtist(artist)" >
-                    <div>{{artist.name}}</div>
-                </div>
+                <div *ngFor="let artist of artists;">
+					<div class="list-group-item" *ngIf="artist.name.indexOf(artistFilter) > -1" (click)="setArtist(artist)" >
+						<span class="textfield">{{artist.name}}</span>
+						<span class="pull-right">
+							<button class="btn btn-xs btn-success"  (click)="addArtistToPlaylist(artist)" >
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</span>				
+					</div>
+				</div>
             </div>           
         </div>
-		<div id="box2" class="panel panel-default panel-wizard col-lg-3">
+		<div id="albumBox" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Album</h4>
             </div>
+			<input class="form-control" placeholder="Filter Albums" [(ngModel)]="albumFilter">
             <div class="list-group eintraege">
-				<div class="list-group-item" *ngFor="let album of selectedArtist?.albums;" (click)="setAlbum(album)">
-                    <div>{{album.title}}</div>
-                </div>
+				<div *ngFor="let album of selectedArtist?.albums;">
+					<div class="list-group-item" *ngIf="album.title.indexOf(albumFilter) > -1" (click)="setAlbum(album)">
+						<span class="textfield">{{album.title}}</span>
+						<span class="pull-right">
+							<button class="btn btn-xs btn-success" (click)="addAlbumToPlaylist(album)" >
+								<span class="glyphicon glyphicon-plus" ></span>
+							</button>
+						</span>					
+					</div>
+				</div>
             </div>		
         </div>
 
-        <div id="box3" class="panel panel-default panel-wizard col-lg-3">
+        <div id="songBox" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
                 <h4>Song</h4>
             </div>
+			<input class="form-control" placeholder="Filter Sons" [(ngModel)]="songFilter">
 		     <div class="list-group eintraege">
-				<div class="list-group-item" *ngFor="let song of selectedAlbum?.songs;" (click)="setSong(song)">
-                    <div>{{song.title}}</div>
-                </div>
+				<div *ngFor="let song of selectedAlbum?.songs;">
+					<div class="list-group-item" *ngIf="song.title.indexOf(songFilter) > -1" >
+						<span class="textfield">{{song.title}}</span>
+						<span class="pull-right">
+							<button class="btn btn-xs btn-success" (click)="addSongToPlaylist(song)" >
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</span>	
+					</div>
+				</div>
             </div>		
-        </div>
+        </div>		
     </div>
+
+	<div class="flexbox">
+		<div id="playlistBox" class="panel panel-default panel-wizard col-lg-3">
+			<div class="panel-heading">
+				<h4>Current Playlist</h4>
+			</div> 			
+			<div class="list-group eintraege">
+				<div class="list-group-item" *ngFor="let song of newPlayList;" >
+					<span class="textfield">{{song.title}}</span>
+					<span class="pull-right">
+						<button class="btn btn-xs btn-danger" (click)="removeSongFromPlaylist(song)">
+							<span class="glyphicon glyphicon-minus"></span>
+						</button>
+					</span>	
+				</div>
+			</div>           
+		</div>
+	</div>
+
 </div>
