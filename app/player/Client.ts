@@ -1,5 +1,5 @@
 import { WSocket } from './WSocket';
-import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST} from './MessageFactory';
+import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST, IP_RECEIVED} from './MessageFactory';
 import { Player } from './Player';
 
 
@@ -24,11 +24,10 @@ export class Client{
 		
 		this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
-            for(var i = 0; i < 10; i++) {
-            	this.sendRTT();
-            }
 
-			this.sendPLAYER_DELAY();            
+            var ipAddr = window.location.hostname;
+
+            this.sendIpAddr(ipAddr);
         });
 	}
 	
@@ -45,6 +44,11 @@ export class Client{
 	sendSONG_REQUEST(){
     	var songRequestMessage = this.messageFactory.createSongRequestMessage();
     	this.wsocket.send(songRequestMessage);
+    }
+
+    sendIpAddr(ipAddr:String){
+        var ipMessage = this.messageFactory.createIpMessagge(ipAddr);
+        this.wsocket.send(ipMessage);
     }
 	
 	handleMessages(message) {
@@ -65,6 +69,9 @@ export class Client{
                     case SONG_REQUEST:
                     	this.handleSongRequestMessage(messageObj);
                     	break;
+                    case IP_RECEIVED:
+                        this.handleIpReceived(messageObj);
+                        break;
                     default:
                         console.log("Client Message type not supported");
                 }
@@ -74,6 +81,19 @@ export class Client{
         } else {
             console.log("Client No data in this message available");
         }
+    }
+
+    initRttAndDelay(){
+        for(var i = 0; i < 10; i++) {
+            this.sendRTT();
+        }
+
+        this.sendPLAYER_DELAY();
+    }
+
+    handleIpReceived(messageObj){
+        console.log("ip has been set");
+        this.initRttAndDelay();
     }
 	
 	handleRTTMessage(messageObj) {

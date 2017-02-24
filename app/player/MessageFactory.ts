@@ -1,6 +1,7 @@
 export const SONG_REQUEST = "song_request";
 export const RTT = "rtt";
 export const PLAYER_DELAY = "player_delay";
+export const IP_RECEIVED = "ip_message";
 
 export class MessageFactory {
     getMessage(message) {
@@ -24,6 +25,13 @@ export class MessageFactory {
     createSongRequestMessage() {
         var json = <any>{};
         json.type = SONG_REQUEST;
+        return JSON.stringify(json);
+    }
+
+    createIpMessagge(ipAddr:String){
+        var json = <any>{};
+        json.type = "ip";
+        json.ip = ipAddr;
         return JSON.stringify(json);
     }
 }

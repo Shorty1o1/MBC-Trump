@@ -2,13 +2,10 @@ var http = require('http');
 var debug = true;
 
 var os = require('os');
-var ifaces = os.networkInterfaces();
-var ip = "141.22.72.32";
+var ip = "";
 
 log("Servers ip :: " + ip);
 var port = 8080;
-var httpAddr = "http://" + ip + ":" + port;
-
 
 var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
@@ -51,20 +48,25 @@ wsServer.on('request', function(request) {
             var passed = (Date.now() - timeInMs) / 1000;
             log("song_request");
             var json = {};
-            json.source = httpAddr + "/dusche.mp3";
+            json.source = getHttpAddr() + "/dusche.mp3";
             json.time = passed;
             json.type = "song_request";
             con.send(JSON.stringify(json));
         } else if (messageObj.type == "player_delay") {
             log("player_delay");
             var json = {};
-            json.source = httpAddr + "/dusche.mp3";
+            json.source = getHttpAddr() + "/dusche.mp3";
             json.type = "player_delay";
             con.send(JSON.stringify(json));
         } else if (messageObj.type == "rtt") {           
             log("rtt");
             var json = message.utf8Data;
             con.send(json);
+        } else if(messageObj.type == "ip"){
+            ip = messageObj.ip;
+            var json = {};
+            json.type = "ip_message";
+            con.send(JSON.stringify(json));
         } else {
             log("got error");
             con.send("wrong message");
@@ -76,4 +78,9 @@ function log(message) {
     if (debug) {
         console.log(message);
     }
+}
+
+function getHttpAddr(){
+    var httpAddr = "http://" + ip + ":" + port;
+    return httpAddr;
 }
