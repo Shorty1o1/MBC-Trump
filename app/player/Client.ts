@@ -119,7 +119,7 @@ export class Client{
         this.player.setSource(src);
         console.log("Client source is set");
 
-        this.player.setTime(time);
+        this.player.setTime(time+rtt);
         console.log("Client time is set");
 
         this.player.start();
