@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {Http} from '@angular/http';
+import {AppComponent} from "../app.component";
+import {Client} from '../player/Client';
 
 @Component({
     selector: 'app-home',	
@@ -7,12 +9,15 @@ import {Http} from '@angular/http';
 })
 export class HomeComponent {
 	//spotifyImageJson;
+
+	private client:Client;
 	
-	constructor(private http:Http){
+	constructor(private http:Http, private app:AppComponent){
 		console.log("los gehts")
 		//this.spotifyImageJson = "asd"
 		//this.http.get('https:// api.spotify.com/v1/search?q=tania%20bowra&type=artist').subscribe(res => console.log("fertig: " +   res.json().data || { }));  
 		//console.log("Hi: " + this.spotifyImageJson.data)
+		this.client = app.getClient();
 	};
 
 	skip() {
@@ -22,5 +27,6 @@ export class HomeComponent {
 	
 	pause(){
 		console.log("pause");
+		this.client.playPauseToggle();
 	}	
 }

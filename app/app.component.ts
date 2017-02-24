@@ -10,10 +10,13 @@ import { Client } from './player/Client';
     templateUrl: './app/app.component.html',
 })
 export class AppComponent {
-	pf = new Platform();
+	private pf = new Platform();
 
-	client = new Client();
+	private client = new Client();
 
+	getClient():Client{
+		return this.client;
+	}
 	
     constructor(){
 		 console.log("Hauptkomponente initialisiert!");
@@ -22,4 +25,7 @@ export class AppComponent {
 	test(){
 		console.log("Testmethod called");
 	}
+
+
+
 }

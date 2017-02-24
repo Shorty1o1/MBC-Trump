@@ -113,6 +113,14 @@ export class Client{
     	console.log("received SongRequestMessage");
     	this.initAudio(messageObj.source, messageObj.time);
     }
+
+    playPauseToggle(){
+        if(this.player.getState()===Player.PAUSE){
+            this.player.start();
+        } else {
+            this.player.pause();
+        }
+    }
 	
 	initTestAudio(src) {
         this.player.createAudioElem();
