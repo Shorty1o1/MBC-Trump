@@ -11,6 +11,7 @@ export class Client{
 	private rtt : number = 0;
     private rttSum : number = 0;
     private rttCounter : number = 0;
+    private stateChangedEventFunction:Function;
 	
 	constructor(){ 
 		this.messageFactory = new MessageFactory();
@@ -120,6 +121,7 @@ export class Client{
         } else {
             this.player.pause();
         }
+        this.stateChangedEventFunction(this.player.getState());
     }
 	
 	initTestAudio(src) {
@@ -153,5 +155,9 @@ export class Client{
             this.player.unmute();
         }, 1000);
 
-    }	
+    }
+
+    addChangeEventHandler(callback:Function){
+        this.stateChangedEventFunction = callback;
+    }
 };

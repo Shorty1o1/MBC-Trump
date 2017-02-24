@@ -18,6 +18,7 @@ export class HomeComponent {
 		//this.http.get('https:// api.spotify.com/v1/search?q=tania%20bowra&type=artist').subscribe(res => console.log("fertig: " +   res.json().data || { }));  
 		//console.log("Hi: " + this.spotifyImageJson.data)
 		this.client = app.getClient();
+		this.client.addChangeEventHandler(this.stateEventCallbackFunction());
 	};
 
 	skip() {
@@ -28,5 +29,11 @@ export class HomeComponent {
 	pause(){
 		console.log("pause");
 		this.client.playPauseToggle();
-	}	
+	}
+
+	stateEventCallbackFunction():Function{
+		return function(state:String){
+			console.log("actual state " + state);
+		}
+	}
 }
