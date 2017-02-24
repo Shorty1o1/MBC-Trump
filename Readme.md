@@ -5,8 +5,6 @@
  -Media
  -Player
 
-# single-page-application-angular2
-
                                                         ...,.,,,,.......        
                                               ,,::::,,,,,,.........,..,.        
                                      :~~~~::,...........................  
@@ -38,6 +36,8 @@
   ....,,,,..                ~..~                :=~ ,:.                         
 ...                        ~:  ::,.       ... ,.,~   .:. 
 
+
+#SinglePageApplication Angular2 TypeScript
 
 ### Initial Setup
 - `$ npm install`
