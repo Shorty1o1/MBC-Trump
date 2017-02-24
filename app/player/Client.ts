@@ -8,9 +8,9 @@ export class Client{
 	private wsocket : WSocket;
 	private messageFactory : MessageFactory;
 	private player : Player;
-	rtt;
-    rttSum ;
-    rttCounter;
+	private rtt : number = 0;
+    private rttSum : number = 0;
+    private rttCounter : number = 0;
 	
 	constructor(){ 
 		this.messageFactory = new MessageFactory();
@@ -105,7 +105,7 @@ export class Client{
         this.player.start();
 	
         window.setTimeout(() =>{
-        	var delay = (1000) - (this.player.getCurrentTime());
+        	var delay : number = (1000) - (this.player.getCurrentTime());
         	this.player.setDelay(delay);
         	this.sendSONG_REQUEST();
         	alert(delay);
@@ -113,13 +113,10 @@ export class Client{
     }
 	
 	initAudio(src, time) {
-        this.player.createAudioElem();
-        console.log("Client Audio element created");
-
         this.player.setSource(src);
         console.log("Client source is set");
 
-        this.player.setTime(time);
+        this.player.setTime(time + this.rtt);
         console.log("Client time is set");
 
         this.player.start();
