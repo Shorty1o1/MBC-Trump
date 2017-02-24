@@ -54,7 +54,6 @@ export class ChooserComponent {
 		for(var i = 0; i < this.newPlayList.length; i++){
 			console.log("i: " +i)
 			if(this.newPlayList[i] == song) { // bloss nicht ===
-				console.log("gefunden")
 				this.newPlayList.splice(i, 1);
 				break;
 			}
@@ -64,7 +63,6 @@ export class ChooserComponent {
     addSongToPlaylist(song : Song) {
 		// Todo:
 		this.newPlayList[this.newPlayList.length] = song;
-		console.log("Länge: " + this.artists.length)
 	}
 	
 	addAlbumToPlaylist(album : Album) {
@@ -74,9 +72,8 @@ export class ChooserComponent {
 	}
 	
 	addArtistToPlaylist(artist : Artist){
-		console.log("Add artist"  +artist.albums.length)
+		console.log("Add artist"  + artist.albums.length)
 		for(var i = 0; i < artist.albums.length; i++) {
-			console.log("Artist: " + artist.name + " , Album: " + artist.albums[i].title)
 			this.addAlbumToPlaylist(artist.albums[i]);
 		}
 	}
