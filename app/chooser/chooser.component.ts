@@ -18,8 +18,23 @@ export class ChooserComponent {
 	albumFilter = "";
 	songFilter = "";
 	
+	// Get JSON and set parents // TODO: maybe better method to do so
     constructor(private http:Http){
-		this.http.get('app/chooser/artists.json').subscribe(res => this.artists = res.json() as Artist[]); 
+    	this.newPlayList = [];
+		this.http.get('app/chooser/artists.json').subscribe(res => {
+			this.artists = res.json() as Artist[];
+		    for(var artistI = 0; artistI < this.artists.length; artistI++){
+		    	var curArtist = this.artists[artistI];
+		    	for(var albumI = 0; albumI < curArtist.albums.length; albumI++){
+		    		var curAlbum = curArtist.albums[albumI];
+		    		curAlbum.artist = curArtist;
+		    		for(var songI = 0; songI < curAlbum.songs.length; songI++){
+		    			var curSong = curAlbum.songs[songI];
+		    			curSong.album = curAlbum;
+		    		}
+		    	}
+		    }
+		}); 		
 	};
   
     setArtist(artist : Artist) {        
@@ -74,11 +89,13 @@ export interface Artist {
 }
 
 export interface Album {
+	artist: Artist;
 	title: string;
 	songs: Song[];
 }
 
 export interface Song {
+	album: Album;
 	title: string;
 	length: string; //TODO
 }
