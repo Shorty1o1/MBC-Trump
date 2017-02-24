@@ -66,14 +66,37 @@
 				<h4>Current Playlist</h4>
 			</div> 			
 			<div class="list-group eintraege">
-				<div class="list-group-item" *ngFor="let song of newPlayList;" >
+			<table class="table table-hover">
+		        <thead>
+		            <tr>
+		                <th>Song</th>
+		                <th>Artist</th>
+		                <th>Album</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr *ngFor="let song of newPlayList;">
+		                <td width="33%">{{song.title}}</td>
+		                <td width="33%">{{song.album.artist.name}}</td>
+		                <td width="33%">
+		                	<span class="textfield">{{song.title}}</span>
+							<span class="pull-right">
+								<button class="btn btn-xs btn-danger" (click)="removeSongFromPlaylist(song)">
+								<span class="glyphicon glyphicon-minus"></span>
+							</button>
+							</span>	
+						</td>
+		            </tr>		           
+		        </tbody>
+		    </table>
+				<!--<div class="list-group-item" *ngFor="let song of newPlayList;" >
 					<span class="textfield">{{song.title}}</span>
 					<span class="pull-right">
 						<button class="btn btn-xs btn-danger" (click)="removeSongFromPlaylist(song)">
 							<span class="glyphicon glyphicon-minus"></span>
 						</button>
 					</span>	
-				</div>
+				</div>-->
 			</div>           
 		</div>
 	</div>
