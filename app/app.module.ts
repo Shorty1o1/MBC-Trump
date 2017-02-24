@@ -11,10 +11,19 @@ import { FormsModule }   from '@angular/forms';
 
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
+import { Platform } from './player/Platform';
+import { Client } from './player/Client';
+
+
 @NgModule({
   imports:      [ BrowserModule, routing, HttpModule, FormsModule  ], //other modules the app depends on
   declarations: [ AppComponent, AboutComponent, ChooserComponent, HomeComponent ], // declare all derectives and components
   bootstrap : [ AppComponent ], // root component to bootstarp
   providers: [    {provide: LocationStrategy, useClass: HashLocationStrategy}  ]
 })
-export class AppModule { }
+export class AppModule {
+	pf = new Platform();
+
+	client = new Client();
+}
+

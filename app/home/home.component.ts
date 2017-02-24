@@ -1,20 +1,12 @@
 import {Component} from '@angular/core';
 import {Http} from '@angular/http';
-import { Platform } from '../player/Platform';
-import { Client } from '../player/Client';
 
 @Component({
     selector: 'app-home',	
     templateUrl: 'app/home/home.html'
 })
 export class HomeComponent {
-
-	pf = new Platform();
-	///private client : Client;
-	
-	client = new Client();
-
-	spotifyImageJson;
+	//spotifyImageJson;
 	
 	constructor(private http:Http){
 		console.log("los gehts")
