@@ -1,0 +1,37 @@
+div.flexbox {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    flex-wrap: wrap;
+	width: 1000px;
+}
+
+div.panel-wizard {
+    flex: 1 1 auto;
+}
+
+.flexbox .col-lg-3{    
+    padding-left: 0;
+    padding-right:0;
+}
+
+div.eintraege {    
+	height: 300;
+	overflow-y: scroll;
+}
+
+div.list-group-item:hover {		
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+span.textfield {
+    text-overflow: ellipsis;
+    width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+}
