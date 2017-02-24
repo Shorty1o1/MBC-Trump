@@ -3,7 +3,7 @@ var debug = true;
 
 var os = require('os');
 var ifaces = os.networkInterfaces();
-var ip = "127.0.0.1";
+var ip = "141.22.72.32";
 
 log("Servers ip :: " + ip);
 var port = 8080;

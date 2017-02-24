@@ -108,6 +108,7 @@ export class Client{
         	var delay : number = (1000) - (this.player.getCurrentTime());
         	this.player.setDelay(delay);
         	this.sendSONG_REQUEST();
+            this.player.pause();
         	alert(delay);
         }, 1000);
     }
