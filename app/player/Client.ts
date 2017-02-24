@@ -1,6 +1,7 @@
 import { WSocket } from './WSocket';
 import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST, IP_RECEIVED} from './MessageFactory';
 import { Player } from './Player';
+import {first} from "rxjs/operator/first";
 
 
 
@@ -11,16 +12,24 @@ export class Client{
 	private rtt : number = 0;
     private rttSum : number = 0;
     private rttCounter : number = 0;
+    private firstTimeTemp : number = 0;
+    private timeAtStartPlayerDelay : number = 0;
 	
 	constructor(){ 
 		this.messageFactory = new MessageFactory();
 		this.wsocket = new WSocket(); // TODO -> sp�ter zu player
+
+
+
 		this.wsocket.addReceiveCallback((message) => {
             this.handleMessages(message);
         });
 		
 		console.log("Client callback for receiving messages added");
 		this.player = new Player();
+
+        this.player.createAudioElem();
+        console.log("Client Audio element created");
 		
 		this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
@@ -111,27 +120,30 @@ export class Client{
     }
 	
 	handleSongRequestMessage(messageObj) {
+        this.firstTimeTemp = Date.now();
     	console.log("received SongRequestMessage");
     	this.initAudio(messageObj.source, messageObj.time);
     }
 	
 	initTestAudio(src) {
-        this.player.createAudioElem();
-        console.log("Client Audio element created");
 
         this.player.setSource(src);
         console.log("Client source is set");
 
         this.player.mute();
         this.player.start();
+        this.timeAtStartPlayerDelay = Date.now();
+
 	
         window.setTimeout(() =>{
-        	var delay : number = (1000) - (this.player.getCurrentTime());
+            var delay : number = ((Date.now() - this.timeAtStartPlayerDelay)/1000) - (this.player.getCurrentTime());
         	this.player.setDelay(delay);
             this.player.pause();
-        	this.sendSONG_REQUEST();
+            this.player.unmute();
+            this.sendSONG_REQUEST();
         	console.log(delay);
         }, 1000);
+
     }
 	
 	initAudio(src, time) {
@@ -141,10 +153,7 @@ export class Client{
         this.player.setTime(time + (this.rtt/1000));
         console.log("Client time is set");
 
-        window.setTimeout(() =>{
-            this.player.start();
-            this.player.unmute();
-        }, 1000);
-
-    }	
+        this.player.start();
+        console.log(Date.now() - this.firstTimeTemp);
+    }
 };
