@@ -25,7 +25,7 @@ export class Player {
 	setTime(time) {
         console.log("Setting time.." + time);
         var before = this.audio.currentTime;
-        this.audio.currentTime = time+delay;
+        this.audio.currentTime = time;
         console.log("Player audio time from " + before + " is set to " + time);
     }
 	

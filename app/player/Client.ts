@@ -14,7 +14,7 @@ export class Client{
 	
 	constructor(){ 
 		this.messageFactory = new MessageFactory();
-		this.wsocket = new WSocket(); // TODO -> später zu player
+		this.wsocket = new WSocket(); // TODO -> spï¿½ter zu player
 		this.wsocket.addReceiveCallback((message) => {
             this.handleMessages(message);
         });
@@ -119,7 +119,7 @@ export class Client{
         this.player.setSource(src);
         console.log("Client source is set");
 
-        this.player.setTime(time+rtt);
+        this.player.setTime(time);
         console.log("Client time is set");
 
         this.player.start();
