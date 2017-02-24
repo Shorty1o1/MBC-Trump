@@ -102,6 +102,7 @@ export class Client{
         this.rttSum += ((receivedTime - sentTime) / 2);
         this.rttCounter++;
         this.rtt = this.rttSum / this.rttCounter;
+        console.log(this.rtt);
     }
 	
 	handlePlayerDelayMessage(messageObj) {
@@ -129,7 +130,7 @@ export class Client{
         	this.player.setDelay(delay);
             this.player.pause();
         	this.sendSONG_REQUEST();
-        	alert(delay);
+        	console.log(delay);
         }, 1000);
     }
 	
@@ -137,7 +138,7 @@ export class Client{
         this.player.setSource(src);
         console.log("Client source is set");
 
-        this.player.setTime(time + this.rtt);
+        this.player.setTime(time + (this.rtt/1000));
         console.log("Client time is set");
 
         window.setTimeout(() =>{
