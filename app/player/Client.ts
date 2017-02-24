@@ -107,8 +107,8 @@ export class Client{
         window.setTimeout(() =>{
         	var delay : number = (1000) - (this.player.getCurrentTime());
         	this.player.setDelay(delay);
-        	this.sendSONG_REQUEST();
             this.player.pause();
+        	this.sendSONG_REQUEST();
         	alert(delay);
         }, 1000);
     }
@@ -120,6 +120,10 @@ export class Client{
         this.player.setTime(time + this.rtt);
         console.log("Client time is set");
 
-        this.player.start();
+        window.setTimeout(() =>{
+            this.player.start();
+            this.player.unmute();
+        }, 1000);
+
     }	
 };

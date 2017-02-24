@@ -1,9 +1,10 @@
-const PLAY = "play";
-const PAUSE = "pause";
+export class Player {
 
-export class Player {	
+    public static PLAY:String = "play";
+    public static PAUSE:String = "pause";
+
 	private audio;
-    private state = PAUSE;
+    private state = Player.PAUSE;
     private delay : number = 0;
 	
 	createAudioElem() {
@@ -13,7 +14,7 @@ export class Player {
 	
 	start() {
         this.audio.play();
-        this.state = PLAY;
+        this.state = Player.PLAY;
         console.log("Player audio started at " + this.audio.currentTime);
     }
 	
@@ -31,7 +32,7 @@ export class Player {
 	
 	pause() {
         this.audio.pause();
-        this.state = PAUSE;
+        this.state = Player.PAUSE;
         console.log("Player pause");
     }
 	
@@ -47,8 +48,20 @@ export class Player {
         this.audio.muted = true;
     }
 
+    unmute(){
+        this.audio.muted = false;
+    }
+
     setDelay(delay) {
         this.delay = delay;
+    }
+
+    stop(){
+        this.audio.stop;
+    }
+
+    getState():String{
+        return this.state;
     }
 
 }	
