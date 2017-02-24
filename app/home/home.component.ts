@@ -1,12 +1,12 @@
+import {Component} from '@angular/core';
+import {Http} from '@angular/http';
 
 @Component({
     selector: 'app-home',	
     templateUrl: 'app/home/home.html'
 })
 export class HomeComponent {
-
-
-	spotifyImageJson;
+	//spotifyImageJson;
 	
 	constructor(private http:Http){
 		console.log("los gehts")
@@ -15,5 +15,12 @@ export class HomeComponent {
 		//console.log("Hi: " + this.spotifyImageJson.data)
 	};
 
-
+	skip() {
+		console.log("Skip")
+		//console.log(this.spotifyImageJson.length)
+	}
+	
+	pause(){
+		console.log("pause");
+	}	
 }

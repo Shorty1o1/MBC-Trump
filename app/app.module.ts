@@ -11,8 +11,6 @@ import { FormsModule }   from '@angular/forms';
 
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
-import {Component} from '@angular/core';
-import {Http} from '@angular/http';
 import { Platform } from './player/Platform';
 import { Client } from './player/Client';
 
@@ -27,14 +25,5 @@ export class AppModule {
 	pf = new Platform();
 
 	client = new Client();
-
-	skip() {
-		console.log("Skip")
-		//console.log(this.spotifyImageJson.length)
-	}
-	
-	pause(){
-		console.log("pause");
-	}	
 }
 
