@@ -1,7 +1,3 @@
-import {Component} from '@angular/core';
-import {Http} from '@angular/http';
-import { Platform } from '../player/Platform';
-import { Client } from '../player/Client';
 
 @Component({
     selector: 'app-home',	
@@ -9,10 +5,6 @@ import { Client } from '../player/Client';
 })
 export class HomeComponent {
 
-	pf = new Platform();
-	///private client : Client;
-	
-	client = new Client();
 
 	spotifyImageJson;
 	
@@ -23,12 +15,5 @@ export class HomeComponent {
 		//console.log("Hi: " + this.spotifyImageJson.data)
 	};
 
-	skip() {
-		console.log("Skip")
-		//console.log(this.spotifyImageJson.length)
-	}
-	
-	pause(){
-		console.log("pause");
-	}	
+
 }
