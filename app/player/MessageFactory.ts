@@ -30,7 +30,7 @@ export class MessageFactory {
 
     createIpMessagge(ipAddr:String){
         var json = <any>{};
-        json.type = "ip";
+        json.type = IP_RECEIVED;
         json.ip = ipAddr;
         return JSON.stringify(json);
     }

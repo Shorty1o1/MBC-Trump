@@ -16,7 +16,7 @@ var serveMp3 = serveStatic("./");
 
 var server = http.createServer(function(req, res) {
     var done = finalhandler(req, res);
-    if (req.url.indexOf("dusche") > -1) {
+    if (req.url.indexOf(".mp3") > -1) {
         serveMp3(req, res, done);
     } else {
         serve(req, res, done);
@@ -38,38 +38,50 @@ function originIsAllowed(origin) {
     return true;
 }
 
+const SONG_REQUEST = "song_request";
+const RTT = "rtt";
+const PLAYER_DELAY = "player_delay";
+const IP_RECEIVED = "ip_message";
+
+var currSong = "/dusche.mp3";
 wsServer.on('request', function(request) {
     var con = request.accept('echo-protocol', request.origin);
     log("connection accepted");
     con.on('message', function(message) {
         log(message);
         messageObj = JSON.parse(message.utf8Data);
-        if (messageObj.type == "song_request") {
-            var passed = (Date.now() - timeInMs) / 1000;
-            log("song_request");
-            var json = {};
-            json.source = getHttpAddr() + "/dusche.mp3";
-            json.time = passed;
-            json.type = "song_request";
-            con.send(JSON.stringify(json));
-        } else if (messageObj.type == "player_delay") {
-            log("player_delay");
-            var json = {};
-            json.source = getHttpAddr() + "/dusche.mp3";
-            json.type = "player_delay";
-            con.send(JSON.stringify(json));
-        } else if (messageObj.type == "rtt") {           
-            log("rtt");
-            var json = message.utf8Data;
-            con.send(json);
-        } else if(messageObj.type == "ip"){
-            ip = messageObj.ip;
-            var json = {};
-            json.type = "ip_message";
-            con.send(JSON.stringify(json));
-        } else {
-            log("got error");
-            con.send("wrong message");
+        switch (messageObj.type) {
+            case SONG_REQUEST:
+                var passed = (Date.now() - timeInMs) / 1000;
+                log(SONG_REQUEST);
+                var json = {};
+                json.source = getHttpAddr() + currSong;
+                json.time = passed;
+                json.type = SONG_REQUEST;
+                con.send(JSON.stringify(json));
+                break;
+            case PLAYER_DELAY:
+                log(PLAYER_DELAY);
+                var json = {};
+                json.source = getHttpAddr() + currSong;
+                json.type = PLAYER_DELAY;
+                con.send(JSON.stringify(json));
+                break;
+            case RTT:
+                log(RTT);
+                var json = message.utf8Data;
+                con.send(json);
+                break;
+            case IP_RECEIVED:
+                ip = messageObj.ip;
+                var json = {};
+                json.type = IP_RECEIVED;
+                con.send(JSON.stringify(json));
+                break;
+            default:
+                log("got error: " + message.type);
+                con.send("wrong message");
+                break;
         }
     });
 });
