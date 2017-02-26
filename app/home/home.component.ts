@@ -36,10 +36,17 @@ export class HomeComponent {
 		this.client.playPauseToggle();
 	}
 
+	private isPlaying: boolean = true;
 	stateEventCallbackFunction():Function{
-		return function(state:String){
-			console.log("actual state " + state);
-		}
+		return (function(state:String){
+			if(state === "play"){
+				this.isPlaying = true;
+				console.log("isplaying " + state);
+			} else {
+				this.isPlaying = false;
+			console.log("isNotPlaying " + state);
+			}
+		}).bind(this);
 	}
 	
 	coverReveicedCallbackFunction() : Function {
