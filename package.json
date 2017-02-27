@@ -2,9 +2,9 @@
   "name": "angular2-start",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "frontend/index.html",
   "scripts": {
-    "start": "concurrently \"npm run tsc:w\" \"node server/server.js\" ",
+    "start": "concurrently \"npm run tsc:w\" \"node backend/server/server.js\" ",
     "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",

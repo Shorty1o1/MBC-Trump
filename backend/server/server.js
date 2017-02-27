@@ -10,14 +10,18 @@ var port = 8080;
 var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
 
-var serve = serveStatic(__dirname + "/../");
-var serveMp3 = serveStatic("./");
+var serve = serveStatic(__dirname + "/../../frontend/");
+var serveMp3 = serveStatic(__dirname);
+var serveModules = serveStatic(__dirname + "/../../");
 
 
-var server = http.createServer(function(req, res) {
+//OF TODO refactor content delievery
+var server = http.createServer(function (req, res) {
     var done = finalhandler(req, res);
     if (req.url.indexOf(".mp3") > -1) {
         serveMp3(req, res, done);
+    } else if (req.url.indexOf("node_modules") > -1) {
+        serveModules(req, res, done);
     } else {
         serve(req, res, done);
     }
@@ -44,10 +48,10 @@ const PLAYER_DELAY = "player_delay";
 const IP_RECEIVED = "ip_message";
 
 var currSong = "/dusche.mp3";
-wsServer.on('request', function(request) {
+wsServer.on('request', function (request) {
     var con = request.accept('echo-protocol', request.origin);
     log("connection accepted");
-    con.on('message', function(message) {
+    con.on('message', function (message) {
         log(message);
         messageObj = JSON.parse(message.utf8Data);
         switch (messageObj.type) {
@@ -92,7 +96,7 @@ function log(message) {
     }
 }
 
-function getHttpAddr(){
+function getHttpAddr() {
     var httpAddr = "http://" + ip + ":" + port;
     return httpAddr;
 }
