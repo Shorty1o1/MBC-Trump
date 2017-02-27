@@ -38,7 +38,7 @@ jspm_packages
 
 app/transpiled-js
 
-typings
+typings/
 
 # IntelliJ
 
