@@ -25,12 +25,12 @@ var ChooserComponent = (function () {
             _this.artists = res.json();
             for (var artistI = 0; artistI < _this.artists.length; artistI++) {
                 var curArtist = _this.artists[artistI];
-                for (var albumI = 0; albumI < curArtist.albums.length; albumI++) {
-                    var curAlbum = curArtist.albums[albumI];
-                    curAlbum.artist = curArtist;
-                    for (var songI = 0; songI < curAlbum.songs.length; songI++) {
-                        var curSong = curAlbum.songs[songI];
-                        curSong.album = curAlbum;
+                for (var albumI = 0; albumI < curArtist.getAlbums().length; albumI++) {
+                    var curAlbum = curArtist.getAlbums()[albumI];
+                    curAlbum.setArtist(curArtist);
+                    for (var songI = 0; songI < curAlbum.getSongs().length; songI++) {
+                        var curSong = curAlbum.getSongs()[songI];
+                        curSong.setAlbum(curAlbum);
                     }
                 }
             }
@@ -38,12 +38,12 @@ var ChooserComponent = (function () {
     }
     ;
     ChooserComponent.prototype.setArtist = function (artist) {
-        console.log("SetArtist: " + artist.name);
+        console.log("SetArtist: " + artist.getName());
         this.selectedArtist = artist;
         this.selectedAlbum = null; // Damit sich die Songliste leert (vom vorherigen Artist)
     };
     ChooserComponent.prototype.setAlbum = function (album) {
-        console.log("SetAlbum: " + album.title);
+        console.log("SetAlbum: " + album.getTitle());
         this.selectedAlbum = album;
     };
     ChooserComponent.prototype.removeSongFromPlaylist = function (song) {
@@ -61,14 +61,14 @@ var ChooserComponent = (function () {
         this.newPlayList[this.newPlayList.length] = song;
     };
     ChooserComponent.prototype.addAlbumToPlaylist = function (album) {
-        for (var i = 0; i < album.songs.length; i++) {
-            this.addSongToPlaylist(album.songs[i]);
+        for (var i = 0; i < album.getSongs().length; i++) {
+            this.addSongToPlaylist(album.getSongs()[i]);
         }
     };
     ChooserComponent.prototype.addArtistToPlaylist = function (artist) {
-        console.log("Add artist" + artist.albums.length);
-        for (var i = 0; i < artist.albums.length; i++) {
-            this.addAlbumToPlaylist(artist.albums[i]);
+        console.log("Add artist" + artist.getAlbums().length);
+        for (var i = 0; i < artist.getAlbums().length; i++) {
+            this.addAlbumToPlaylist(artist.getAlbums()[i]);
         }
     };
     return ChooserComponent;

@@ -15,7 +15,7 @@ export class Album{
         return this.title;
     }
 
-    getSong() : Song[]{
+    getSongs() : Song[]{
         return this.songs;
     }
 

@@ -10,8 +10,8 @@
 			<input class="form-control" placeholder="Filter Artists" [(ngModel)]="artistFilter">
             <div class="list-group eintraege">
                 <div *ngFor="let artist of artists;">
-					<div class="list-group-item" *ngIf="artist.name.indexOf(artistFilter) > -1" (click)="setArtist(artist)" >
-						<span class="textfield">{{artist.name}}</span>
+					<div class="list-group-item" *ngIf="artist.getName().indexOf(artistFilter) > -1" (click)="setArtist(artist)" >
+						<span class="textfield">{{artist.getName()}}</span>
 						<span class="pull-right">
 							<button class="btn btn-xs btn-success"  (click)="addArtistToPlaylist(artist)" >
 								<span class="glyphicon glyphicon-plus"></span>
