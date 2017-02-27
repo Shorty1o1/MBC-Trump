@@ -18,26 +18,17 @@ export class Server {
 
     constructor(){
         console.log("Servers ip :: " + this.ip);
-                                         //S   T  A  F  B F:\Git\Uni\MBC-Trump\f
-        let serve           = serveStatic(__dirname + "/../../frontend/"); // TODO: nacher vll vom javascript bekommmen?   // Pfad zur index.html (typescript-ordner)     
-
+        let serve           = serveStatic(__dirname + "/../../frontend/");   // Pfad zur index.html (typescript-ordner)     
         let serveModules    = serveStatic(__dirname + "/../../");
         let serveMp3        = serveStatic("./");
-        console.log("Dirname: " + __dirname); //
+
         var server = http.createServer(function(req, res) { // Todo: extra function fuer machen wie in handleRequest()
             var done = finalhandler(req, res);
             if (req.url.indexOf(".mp3") > -1) {
-                console.log("mp3-req");
                 serveMp3(req, res, done);
             } else if (req.url.indexOf("node_modules") > -1) {
-                console.log("node");
                 serveModules(req, res, done);
-            } /*else if (req.url.indexOf("frontend") > -1) {
-                console.log("trans" + req.url);
-                console.log(__dirname)
-                serveTranspiled(req, res, done);
-            }*/  else {
-                console.log("serve");
+            } else {
                 serve(req, res, done);
             }
         });

@@ -4,10 +4,11 @@
   "description": "",
   "main": "src/frontend/index.html",
   "scripts": {
-    "start": "concurrently \"npm run tsc:w\" \"node build/backend/server\" ",
+    "start": "npm run tscBackend && concurrently \"npm run tscWFrontend\" \"node backend/build/server\" ",
     "postinstall": "typings install",
     "tsc": "tsc --p tsconfigFrontend.json && tsc --p tsconfigBackend.json",
-    "tsc:w": "tsc -w --p tsconfigFrontend.json && tsc -w --p tsconfigBackend.json",
+    "tscBackend": "tsc --p tsconfigBackend.json",
+    "tscWFrontend": "tsc -w --p tsconfigFrontend.json",
     "typings": "typings"
   },
   "keywords": [],
