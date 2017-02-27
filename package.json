@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/frontend/index.html",
   "scripts": {
-    "start": "concurrently \"npm run tsc:w\" \"node src/backend/server\" ",
+    "start": "concurrently \"npm run tsc:w\" \"node build/backend/server\" ",
     "postinstall": "typings install",
     "tsc": "tsc --p tsconfigFrontend.json && tsc --p tsconfigBackend.json",
     "tsc:w": "tsc -w --p tsconfigFrontend.json && tsc -w --p tsconfigBackend.json",

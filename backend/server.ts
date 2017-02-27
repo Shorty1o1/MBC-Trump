@@ -17,10 +17,10 @@ export class Server {
     private timeInMs = Date.now();
 
     constructor(){
-        this.log("Servers ip :: " + this.ip);
+        console.log("Servers ip :: " + this.ip);
                                          //S   T  A  F  B F:\Git\Uni\MBC-Trump\f
         let serve           = serveStatic(__dirname + "/../../frontend/"); // TODO: nacher vll vom javascript bekommmen?   // Pfad zur index.html (typescript-ordner)     
-        let serveTranspiled = serveStatic(__dirname + "/../");
+
         let serveModules    = serveStatic(__dirname + "/../../");
         let serveMp3        = serveStatic("./");
         console.log("Dirname: " + __dirname); //
@@ -61,28 +61,28 @@ export class Server {
     private currSong : string = "/dusche.mp3";
     handleRequest(request){
         var con = request.accept('echo-protocol', request.origin);
-        this.log("connection accepted");
+        console.log("connection accepted");
         con.on('message', function(message) {
-            this.log(message);
+            console.log(message);
             var messageObj = JSON.parse(message.utf8Data);
             var json = <any> {};
             switch (messageObj.type) {
                 case this.SONG_REQUEST:
                     var passed = (Date.now() - this.timeInMs) / 1000;
-                    this.log(this.SONG_REQUEST);                    
+                    console.log(this.SONG_REQUEST);                    
                     json.source = this.getHttpAddr() + this.currSong;
                     json.time = passed;
                     json.type = this.SONG_REQUEST;
                     con.send(JSON.stringify(json));
                     break;
                 case this.PLAYER_DELAY:
-                    this.log(this.PLAYER_DELAY);
+                    console.log(this.PLAYER_DELAY);
                     json.source = this.getHttpAddr() + this.currSong;
                     json.type = this.PLAYER_DELAY;
                     con.send(JSON.stringify(json));
                     break;
                 case this.RTT:
-                    this.log(this.RTT);
+                    console.log(this.RTT);
                     json = message.utf8Data;
                     con.send(json);
                     break;
@@ -92,7 +92,7 @@ export class Server {
                     con.send(JSON.stringify(json));
                     break;
                 default:
-                    this.log("got error: " + message.type);
+                    console.log("got error: " + message.type);
                     con.send("wrong message");
                     break;
             }
