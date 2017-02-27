@@ -2,12 +2,12 @@
   "name": "angular2-start",
   "version": "1.0.0",
   "description": "",
-  "main": "frontend/index.html",
+  "main": "src/frontend/index.html",
   "scripts": {
-    "start": "concurrently \"npm run tsc:w\" \"node backend/server/server.js\" ",
+    "start": "concurrently \"npm run tsc:w\" \"node src/backend/server\" ",
     "postinstall": "typings install",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
+    "tsc": "tsc --p tsconfigFrontend.json && tsc --p tsconfigBackend.json",
+    "tsc:w": "tsc -w --p tsconfigFrontend.json && tsc -w --p tsconfigBackend.json",
     "typings": "typings"
   },
   "keywords": [],
