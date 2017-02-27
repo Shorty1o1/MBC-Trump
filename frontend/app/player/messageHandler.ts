@@ -7,6 +7,7 @@ export class MessageHandler{
     private messageFactory : MessageFactory;
 
     constructor(socket : WSocket, messageFactory : MessageFactory){
+        this.messageFactory = messageFactory;
         socket.addReceiveCallback((message) => {
             this.handleMessages(message);
         });
@@ -21,7 +22,7 @@ export class MessageHandler{
             try {
                 var messageObj = this.messageFactory.getMessage(message.data);
                 for(let handler of this.handler[messageObj.type]){
-                    handler();
+                    handler(messageObj);
                 }
             } catch (err) {
                 console.log( "ERROR: " + err);
@@ -37,5 +38,10 @@ export class MessageHandler{
             this.handler[messageType] = [];
         }
         this.handler[messageType].push(handler);
+    }
+
+    initRttAndDelay()
+    {
+        console.log("geht nicht");
     }
 }

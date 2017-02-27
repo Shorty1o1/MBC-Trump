@@ -4,6 +4,7 @@ var MessageHandler = (function () {
     function MessageHandler(socket, messageFactory) {
         var _this = this;
         this.handler = {};
+        this.messageFactory = messageFactory;
         socket.addReceiveCallback(function (message) {
             _this.handleMessages(message);
         });
@@ -17,7 +18,7 @@ var MessageHandler = (function () {
                 var messageObj = this.messageFactory.getMessage(message.data);
                 for (var _i = 0, _a = this.handler[messageObj.type]; _i < _a.length; _i++) {
                     var handler = _a[_i];
-                    handler();
+                    handler(messageObj);
                 }
             }
             catch (err) {
@@ -33,6 +34,9 @@ var MessageHandler = (function () {
             this.handler[messageType] = [];
         }
         this.handler[messageType].push(handler);
+    };
+    MessageHandler.prototype.initRttAndDelay = function () {
+        console.log("geht nicht");
     };
     return MessageHandler;
 }());
