@@ -38,6 +38,8 @@ jspm_packages
 
 app/transpiled-js
 
+typings/*
+
 # IntelliJ
 
 .idea
