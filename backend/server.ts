@@ -42,50 +42,52 @@ export class Server {
             autoAcceptConnections: false
         });
 
-        wsServer.on('request', this.handleRequest);       
+        wsServer.on('request', this.handleRequest.bind(this)); // Das bind weg sollte weg. Wahrscheinlich muss irgendwo noch eine ArrowFunction => eingebaut werden
     }
 
     originIsAllowed(origin) : boolean {
         return true;
     }  
-   
+    
     private currSong : string = "/dusche.mp3";
     handleRequest(request){
         var con = request.accept('echo-protocol', request.origin);
         console.log("connection accepted");
-        con.on('message', function(message) {
-            console.log(message);
+        con.on('message', (message) => {
+            console.log("Message:");
+            // console.log(message);
             var messageObj = JSON.parse(message.utf8Data);
+            console.log(messageObj)
             var json = <any> {};
             switch (messageObj.type) {
-                case this.SONG_REQUEST:
+                case SONG_REQUEST:
                     var passed = (Date.now() - this.timeInMs) / 1000;
-                    console.log(this.SONG_REQUEST);                    
+                    console.log(SONG_REQUEST);                    
                     json.source = this.getHttpAddr() + this.currSong;
                     json.time = passed;
-                    json.type = this.SONG_REQUEST;
+                    json.type = SONG_REQUEST;
                     con.send(JSON.stringify(json));
-                    break;
-                case this.PLAYER_DELAY:
-                    console.log(this.PLAYER_DELAY);
+                break;
+                case PLAYER_DELAY:
+                    console.log(PLAYER_DELAY);
                     json.source = this.getHttpAddr() + this.currSong;
-                    json.type = this.PLAYER_DELAY;
+                    json.type = PLAYER_DELAY;
                     con.send(JSON.stringify(json));
-                    break;
-                case this.RTT:
-                    console.log(this.RTT);
+                break;
+                case RTT:
+                    console.log(RTT);
                     json = message.utf8Data;
                     con.send(json);
-                    break;
-                case this.IP_RECEIVED:
+                break;
+                case IP_RECEIVED:
                     this.ip = messageObj.ip;
-                    json.type = this.IP_RECEIVED;
+                    json.type = IP_RECEIVED;
                     con.send(JSON.stringify(json));
-                    break;
+                break;
                 default:
-                    console.log("got error: " + message.type);
+                    console.log("got error: " + messageObj.type);
                     con.send("wrong message");
-                    break;
+                break;
             }
         });
     }
@@ -97,6 +99,7 @@ export class Server {
     }
 
     getHttpAddr(){
+        console.log("GET");
         var httpAddr = "http://" + this.ip + ":" + this.port;
         return httpAddr;
     }
