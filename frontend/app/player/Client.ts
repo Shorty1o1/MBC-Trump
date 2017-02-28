@@ -1,7 +1,9 @@
-import { WSocket } from './WSocket';
+﻿import { WSocket } from './WSocket';
 import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST, IP_RECEIVED} from './MessageFactory';
 import { Player } from './Player';
-import {first} from "rxjs/operator/first";
+
+
+// client class doing some stuff
 
 
 
@@ -155,7 +157,15 @@ export class Client{
         }, 1000);
 
     }
-    
+
+//	  (   )
+//	  (   ) (
+//	   ) _   )
+//	    ( \_
+//	  _(_\ \)__
+//	 (____\___)) 
+
+
     initAudio(src, time) {
         this.player.setSource(src);
         console.log("Client source is set");
