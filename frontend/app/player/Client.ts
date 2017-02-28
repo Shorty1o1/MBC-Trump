@@ -1,7 +1,14 @@
-import { WSocket } from './WSocket';
+﻿import { WSocket } from './WSocket';
 import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST, IP_RECEIVED} from './MessageFactory';
 import { Player } from './Player';
+
+
+
+// client class doing some stuff
+
 import {first} from "rxjs/operator/first";
+import { MessageHandler } from './messageHandler'
+
 
 
 
@@ -9,6 +16,7 @@ export class Client{
     private wsocket : WSocket;
     private messageFactory : MessageFactory;
     private player : Player;
+    private messageHandler : MessageHandler;
     private rtt : number = 0;
     private rttSum : number = 0;
     private rttCounter : number = 0;
@@ -20,12 +28,13 @@ export class Client{
         this.messageFactory = new MessageFactory();
         this.wsocket = new WSocket(); // TODO -> sp�ter zu player
 
+        this.messageHandler = new MessageHandler(this.wsocket, this.messageFactory);
 
+        this.messageHandler.addHandler("rtt", this.handleRTTMessage);
+        this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
+        this.messageHandler.addHandler("song_request", this.handleSongRequestMessage);
+        this.messageHandler.addHandler("ip_message", this.handleIpReceived);
 
-        this.wsocket.addReceiveCallback((message) => {
-            this.handleMessages(message);
-        });
-        
         console.log("Client callback for receiving messages added");
         this.player = new Player();
 
@@ -60,38 +69,6 @@ export class Client{
         var ipMessage = this.messageFactory.createIpMessagge(ipAddr);
         this.wsocket.send(ipMessage);
     }
-    
-    handleMessages(message) {
-        if (message.data) {
-            if(message.data == "wrong message") {
-                
-            }
-            console.log("Client Got message " + message.data);
-            try {
-                var messageObj = this.messageFactory.getMessage(message.data);
-                switch (messageObj.type) {
-                    case RTT:
-                        this.handleRTTMessage(messageObj);
-                        break;
-                    case PLAYER_DELAY:
-                        this.handlePlayerDelayMessage(messageObj);
-                        break;
-                    case SONG_REQUEST:
-                        this.handleSongRequestMessage(messageObj);
-                        break;
-                    case IP_RECEIVED:
-                        this.handleIpReceived(messageObj);
-                        break;
-                    default:
-                        console.log("Client Message type not supported");
-                }
-            } catch (err) {
-                console.log( "ERROR: " + err);
-            }
-        } else {
-            console.log("Client No data in this message available");
-        }
-    }
 
     initRttAndDelay(){
         for(var i = 0; i < 10; i++) {
@@ -101,12 +78,12 @@ export class Client{
         this.sendPLAYER_DELAY();
     }
 
-    handleIpReceived(messageObj){
+    handleIpReceived = (messageObj) => {
         console.log("ip has been set");
         this.initRttAndDelay();
     }
     
-    handleRTTMessage(messageObj) {
+    handleRTTMessage = (messageObj) =>  {
         var sentTime = messageObj.sentTime;
         var receivedTime = Date.now();
         this.rttSum += ((receivedTime - sentTime) / 2);
@@ -115,12 +92,12 @@ export class Client{
         console.log(this.rtt);
     }
     
-    handlePlayerDelayMessage(messageObj) {
+    handlePlayerDelayMessage = (messageObj) => {
         console.log("received PlayerDelayMessage");
         this.initTestAudio(messageObj.source);
     }
     
-    handleSongRequestMessage(messageObj) {
+    handleSongRequestMessage = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
         this.initAudio(messageObj.source, messageObj.time);
@@ -155,7 +132,15 @@ export class Client{
         }, 1000);
 
     }
-    
+
+//	  (   )
+//	  (   ) (
+//	   ) _   )
+//	    ( \_
+//	  _(_\ \)__
+//	 (____\___)) 
+
+
     initAudio(src, time) {
         this.player.setSource(src);
         console.log("Client source is set");
