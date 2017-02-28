@@ -18,13 +18,14 @@ export class Server {
 
     constructor(){
         console.log("Servers ip :: " + this.ip);
-        let serve           = serveStatic(__dirname + "/../../frontend/");   // Pfad zur index.html (typescript-ordner)     
-        let serveModules    = serveStatic(__dirname + "/../../");
-        let serveMp3        = serveStatic("./");
+        let serve           = serveStatic("./frontend/");   // Pfad zur index.html (typescript-ordner)     
+        let serveModules    = serveStatic("./");
+        let serveMp3        = serveStatic("./mp3/");
 
         var server = http.createServer(function(req, res) { // Todo: extra function fuer machen wie in handleRequest()
             var done = finalhandler(req, res);
             if (req.url.indexOf(".mp3") > -1) {
+				console.log("mp3")
                 serveMp3(req, res, done);
             } else if (req.url.indexOf("node_modules") > -1) {
                 serveModules(req, res, done);
