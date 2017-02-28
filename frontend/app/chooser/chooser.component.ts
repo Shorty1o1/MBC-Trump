@@ -1,11 +1,6 @@
 import {Component} from '@angular/core';
 import {Http} from '@angular/http';
 
-import { Album } from './album';
-import { Song } from './song';
-import { Artist } from './artist';
-
-
 @Component({
     selector: 'app-chooser',
     templateUrl: 'app/chooser/chooser.html',
@@ -29,13 +24,13 @@ export class ChooserComponent {
 		this.http.get('app/chooser/artists.json').subscribe(res => {
 			this.artists = res.json() as Artist[];
 		    for(var artistI = 0; artistI < this.artists.length; artistI++){
-		    	var curArtist : Artist = this.artists[artistI];
-		    	for(var albumI = 0; albumI < curArtist.getAlbums().length; albumI++){
-		    		var curAlbum : Album = curArtist.getAlbums()[albumI];
-		    		curAlbum.setArtist(curArtist);
-		    		for(var songI = 0; songI < curAlbum.getSongs().length; songI++){
-		    			var curSong = curAlbum.getSongs()[songI];
-		    			curSong.setAlbum(curAlbum);
+		    	var curArtist = this.artists[artistI];
+		    	for(var albumI = 0; albumI < curArtist.albums.length; albumI++){
+		    		var curAlbum = curArtist.albums[albumI];
+		    		curAlbum.artist = curArtist;
+		    		for(var songI = 0; songI < curAlbum.songs.length; songI++){
+		    			var curSong = curAlbum.songs[songI];
+		    			curSong.album = curAlbum;
 		    		}
 		    	}
 		    }
@@ -43,13 +38,13 @@ export class ChooserComponent {
 	};
   
     setArtist(artist : Artist) {        
-        console.log("SetArtist: " + artist.getName());
+        console.log("SetArtist: " + artist.name);
         this.selectedArtist = artist;
 		this.selectedAlbum = null; // Damit sich die Songliste leert (vom vorherigen Artist)
     }			
    
 	setAlbum(album : Album) {
-		console.log("SetAlbum: " + album.getTitle())
+		console.log("SetAlbum: " + album.title)
 		this.selectedAlbum = album;
 		
 	}
@@ -71,15 +66,33 @@ export class ChooserComponent {
 	}
 	
 	addAlbumToPlaylist(album : Album) {
-		for(var i = 0; i < album.getSongs().length; i++) {			
-			this.addSongToPlaylist(album.getSongs()[i]);
+		for(var i = 0; i < album.songs.length; i++) {			
+			this.addSongToPlaylist(album.songs[i]);
 		}
 	}
 	
 	addArtistToPlaylist(artist : Artist){
-		console.log("Add artist"  + artist.getAlbums().length)
-		for(var i = 0; i < artist.getAlbums().length; i++) {
-			this.addAlbumToPlaylist(artist.getAlbums()[i]);
+		console.log("Add artist"  + artist.albums.length)
+		for(var i = 0; i < artist.albums.length; i++) {
+			this.addAlbumToPlaylist(artist.albums[i]);
 		}
 	}
 };
+
+
+export interface Artist {
+	name: string;
+	albums: Album[];
+}
+
+export interface Album {
+	artist: Artist;
+	title: string;
+	songs: Song[];
+}
+
+export interface Song {
+	album: Album;
+	title: string;
+	length: string; //TODO
+}

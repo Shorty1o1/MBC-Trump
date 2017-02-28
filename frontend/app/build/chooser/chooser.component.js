@@ -25,6 +25,7 @@ var ChooserComponent = (function () {
             _this.artists = res.json();
             for (var artistI = 0; artistI < _this.artists.length; artistI++) {
                 var curArtist = _this.artists[artistI];
+                console.log(_this.artists[0].peter);
                 for (var albumI = 0; albumI < curArtist.albums.length; albumI++) {
                     var curAlbum = curArtist.albums[albumI];
                     curAlbum.artist = curArtist;
