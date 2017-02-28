@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Kevin MacLeod",
+    "id" : 1,
+    "albums": [
+      {
+        "title": "Royalty Free",
+        "id" : 1,
+        "songs": [
+          {
+            "title": "Bloom",
+            "length": "4:07",
+            "path" : "mp3/Call_to_Adventure.mp3",
+            "id" : 1
+          },
+          {
+            "title": "Cold Funk",
+            "length": "4:48",
+            "path" : "mp3/Cold_Funk.mp3",
+            "id" : 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Jaime Bertin",
+    "id" : 2,
+    "albums": [
+      {
+        "title": "Er hat ein Album",
+        "id" : 2,
+        "songs": [
+          {
+            "title": "Memories",
+            "length": "4:12",
+            "path" : "mp3/Memories.mp3",
+            "id" : 3,
+          }
+        ] 
+      }
+    ]
+  },
+  {
+    "name": "Nicholas Standing",
+    "id" : 3,
+    "albums": [
+      {
+        "title": "Whatever We Were Before",
+        "id" : 3,
+        "songs": [
+          {
+            "title": "Whatever We Were Before",
+            "length": "3:36",            
+            "path" : "mp3/Whatever_We_Were_Before.mp3",
+            "id" : 4
+          }
+        ]
+      }
+    ]
+  }
+]
