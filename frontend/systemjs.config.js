@@ -28,7 +28,7 @@
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
       app: {
-        main: './transpiled-js/main.js', //path to main.js
+        main: './build/main.js', //path to main.js viewed from main.ts
         defaultExtension: 'js'
       },
       rxjs: {
