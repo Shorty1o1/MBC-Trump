@@ -72,12 +72,12 @@ export class Client{
         this.sendPLAYER_DELAY();
     }
 
-    handleIpReceived(messageObj){
+    handleIpReceived = (messageObj) => {
         console.log("ip has been set");
         this.initRttAndDelay();
     }
     
-    handleRTTMessage(messageObj) {
+    handleRTTMessage = (messageObj) =>  {
         var sentTime = messageObj.sentTime;
         var receivedTime = Date.now();
         this.rttSum += ((receivedTime - sentTime) / 2);
@@ -86,12 +86,12 @@ export class Client{
         console.log(this.rtt);
     }
     
-    handlePlayerDelayMessage(messageObj) {
+    handlePlayerDelayMessage = (messageObj) => {
         console.log("received PlayerDelayMessage");
         this.initTestAudio(messageObj.source);
     }
     
-    handleSongRequestMessage(messageObj) {
+    handleSongRequestMessage = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
         this.initAudio(messageObj.source, messageObj.time);

@@ -12,6 +12,27 @@ var Client = (function () {
         this.rttCounter = 0;
         this.firstTimeTemp = 0;
         this.timeAtStartPlayerDelay = 0;
+        this.handleIpReceived = function (messageObj) {
+            console.log("ip has been set");
+            _this.initRttAndDelay();
+        };
+        this.handleRTTMessage = function (messageObj) {
+            var sentTime = messageObj.sentTime;
+            var receivedTime = Date.now();
+            _this.rttSum += ((receivedTime - sentTime) / 2);
+            _this.rttCounter++;
+            _this.rtt = _this.rttSum / _this.rttCounter;
+            console.log(_this.rtt);
+        };
+        this.handlePlayerDelayMessage = function (messageObj) {
+            console.log("received PlayerDelayMessage");
+            _this.initTestAudio(messageObj.source);
+        };
+        this.handleSongRequestMessage = function (messageObj) {
+            _this.firstTimeTemp = Date.now();
+            console.log("received SongRequestMessage");
+            _this.initAudio(messageObj.source, messageObj.time);
+        };
         this.messageFactory = new MessageFactory_1.MessageFactory();
         this.wsocket = new WSocket_1.WSocket(); // TODO -> sp�ter zu player
         this.messageHandler = new messageHandler_1.MessageHandler(this.wsocket, this.messageFactory);
@@ -50,27 +71,6 @@ var Client = (function () {
             this.sendRTT();
         }
         this.sendPLAYER_DELAY();
-    };
-    Client.prototype.handleIpReceived = function (messageObj) {
-        console.log("ip has been set");
-        this.initRttAndDelay();
-    };
-    Client.prototype.handleRTTMessage = function (messageObj) {
-        var sentTime = messageObj.sentTime;
-        var receivedTime = Date.now();
-        this.rttSum += ((receivedTime - sentTime) / 2);
-        this.rttCounter++;
-        this.rtt = this.rttSum / this.rttCounter;
-        console.log(this.rtt);
-    };
-    Client.prototype.handlePlayerDelayMessage = function (messageObj) {
-        console.log("received PlayerDelayMessage");
-        this.initTestAudio(messageObj.source);
-    };
-    Client.prototype.handleSongRequestMessage = function (messageObj) {
-        this.firstTimeTemp = Date.now();
-        console.log("received SongRequestMessage");
-        this.initAudio(messageObj.source, messageObj.time);
     };
     Client.prototype.playPauseToggle = function () {
         if (this.player.getState() === Player_1.Player.PAUSE) {
