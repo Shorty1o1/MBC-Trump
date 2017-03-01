@@ -50,7 +50,7 @@ export class Server {
         return true;
     }  
     
-    private currSong : string = "/dusche.mp3";
+    private currSong : string = "/Memories.mp3";
     handleRequest(request){
         var con = request.accept('echo-protocol', request.origin);
         console.log("connection accepted");
