@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 
-
 import { Platform } from './player/Platform';
 import { Client } from './player/Client';
-
 
 @Component({
     selector: 'app-root',
@@ -14,6 +12,8 @@ export class AppComponent {
 
 	private client = new Client();
 
+	private isMaster : boolean = true;
+
 	getClient():Client{
 		return this.client;
 	}
@@ -21,11 +21,4 @@ export class AppComponent {
     constructor(){
 		 console.log("Hauptkomponente initialisiert!");
 	}
-
-	test(){
-		console.log("Testmethod called");
-	}
-
-
-
 }

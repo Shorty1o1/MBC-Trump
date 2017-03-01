@@ -1,24 +1,29 @@
 <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a routerLink="/home" routerLinkActive="active">Currently Playing</a></li>
-          <li><a routerLink="/chooser" routerLinkActive="active">Choose Songs</a></li>
-          <li><a routerLink="/about" routerLinkActive="active">About</a></li>
-        </ul>
-      </div>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <p class="navbar-brand" href="/">TRUMP</p>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li *ngIf="!isMaster"><a routerLink="/home" routerLinkActive="active">Currently Playing</a></li>
+                <li *ngIf="isMaster"><a routerLink="/chooser" routerLinkActive="active">Choose Songs</a></li>
+                <li *ngIf="isMaster"><a routerLink="/about" routerLinkActive="active">About</a></li>
+            </ul>
+            <div class="navbar-form navbar-right">
+                <button type="button" checked class="btn btn-primary" (click)="isMaster = !isMaster">{{ isMaster == true ? 'Be A Slave' : 'Be A Master' }}</button>
+            </div>
+        </div>
     </div>
-  </div>
-</nav>
+</nav> 
+
 <div class="container">
-  <div class="row">
-    <!-- routing here -->
-    <router-outlet></router-outlet>
-  </div>
+    <div class="row">
+        <!-- routing here -->
+        <router-outlet></router-outlet>
+    </div>
 </div>
 <footer class="footer">
     <div class="container">
-    <p class="text-muted">Currently Playing: Trump - Dafq happend in Sweden?.</p>
+        <p class="text-muted">Currently Playing: Trump - Dafq happend in Sweden?.</p>
     </div>
 </footer>
