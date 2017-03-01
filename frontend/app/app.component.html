@@ -5,12 +5,13 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li *ngIf="!isMaster"><a routerLink="/home" routerLinkActive="active">Currently Playing</a></li>
+                <li *ngIf="isMaster"><a routerLink="/home" routerLinkActive="active">Master-Control</a></li>
                 <li *ngIf="isMaster"><a routerLink="/chooser" routerLinkActive="active">Choose Songs</a></li>
-                <li *ngIf="isMaster"><a routerLink="/about" routerLinkActive="active">About</a></li>
+                <li *ngIf="!isMaster"><a routerLink="/slave">Currently Playing</a></li>
+                <li><a routerLink="/about" routerLinkActive="active">About</a></li>
             </ul>
             <div class="navbar-form navbar-right">
-                <button type="button" checked class="btn btn-primary" (click)="isMaster = !isMaster">{{ isMaster == true ? 'Be A Slave' : 'Be A Master' }}</button>
+                <button type="button" checked class="btn btn-primary" (click)="changeMasterSlave()" (click)="isMaster = !isMaster">{{ isMaster == true ? 'Be A Slave' : 'Be A Master' }}</button>
             </div>
         </div>
     </div>

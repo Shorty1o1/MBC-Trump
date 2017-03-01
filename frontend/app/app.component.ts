@@ -17,6 +17,18 @@ export class AppComponent {
 	getClient():Client{
 		return this.client;
 	}
+
+
+	// Todo:
+	changeMasterSlave(){
+		console.log("Master-Slave-Change ")
+		if(this.isMaster){
+			// Wechsel zur slave-component-seite
+		} else {
+			// Wechsel zur master-component-seite
+		}
+	}
+
 	
     constructor(){
 		 console.log("Hauptkomponente initialisiert!");
