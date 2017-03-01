@@ -10,11 +10,9 @@ import { MessageFactory } from './messageFactory';
 const SONG_REQUEST = "song_request";
 const RTT = "rtt";
 const PLAYER_DELAY = "player_delay";
-const IP_RECEIVED = "ip_message";
 
 export class Server {
     private static debug : boolean = true;
-    private ip = "";
     private port : number = 8080;
 
     private timeInMs = Date.now();
@@ -26,7 +24,6 @@ export class Server {
     private currSong : string = "/dusche.mp3";
 
     constructor(){
-        console.log("Servers ip :: " + this.ip);
         let serve           = serveStatic(__dirname + "/../../frontend/");   // Pfad zur index.html (typescript-ordner)     
         let serveModules    = serveStatic(__dirname + "/../../");
         let serveMp3        = serveStatic("./");
@@ -51,8 +48,6 @@ export class Server {
         this.messageHandler.addHandler("rtt", this.handleRTT);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelay);
         this.messageHandler.addHandler("song_request", this.handleSongRequest);
-        this.messageHandler.addHandler("ip_message", this.handleIpReceived);
-        
 
     }
 
@@ -64,7 +59,7 @@ export class Server {
         var passed = (Date.now() - this.timeInMs) / 1000;
         var json = {} as any;
         console.log(SONG_REQUEST);                    
-        json.source = this.getHttpAddr() + this.currSong;
+        json.source = this.currSong;
         json.time = passed;
         json.type = SONG_REQUEST;
         this.wSocket.send(json);
@@ -79,15 +74,8 @@ export class Server {
     handlePlayerDelay = (messageObj) => {
         console.log(PLAYER_DELAY);
         var json = {} as any;
-        json.source = this.getHttpAddr() + this.currSong;
+        json.source = this.currSong;
         json.type = PLAYER_DELAY;
-        this.wSocket.send(json);
-    }
-
-    handleIpReceived = (messageObj) => {
-        this.ip = messageObj.ip;
-        var json = {} as any;
-        json.type = IP_RECEIVED;
         this.wSocket.send(json);
     }
 
@@ -95,12 +83,6 @@ export class Server {
         if (this.debug) {
             console.log(message);
         }
-    }
-
-    getHttpAddr(){
-        console.log("GET");
-        var httpAddr = "http://" + this.ip + ":" + this.port;
-        return httpAddr;
     }
 }
 

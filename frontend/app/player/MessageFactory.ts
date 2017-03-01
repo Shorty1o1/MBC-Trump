@@ -27,11 +27,4 @@ export class MessageFactory {
         json.type = SONG_REQUEST;
         return JSON.stringify(json);
     }
-
-    createIpMessagge(ipAddr:String){
-        var json = <any>{};
-        json.type = IP_RECEIVED;
-        json.ip = ipAddr;
-        return JSON.stringify(json);
-    }
 }

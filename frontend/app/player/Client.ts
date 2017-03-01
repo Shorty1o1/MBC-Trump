@@ -23,6 +23,7 @@ export class Client{
     private stateChangedEventFunction:Function;
     private firstTimeTemp : number = 0;
     private timeAtStartPlayerDelay : number = 0;
+    private serverAddress : string;
     
     constructor(){ 
         this.messageFactory = new MessageFactory();
@@ -33,20 +34,19 @@ export class Client{
         this.messageHandler.addHandler("rtt", this.handleRTTMessage);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
         this.messageHandler.addHandler("song_request", this.handleSongRequestMessage);
-        this.messageHandler.addHandler("ip_message", this.handleIpReceived);
 
         console.log("Client callback for receiving messages added");
         this.player = new Player();
 
         this.player.createAudioElem();
         console.log("Client Audio element created");
+
+        this.serverAddress = "http://" + window.location.hostname + ":" + window.location.port;
         
         this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
+            this.initRttAndDelay();         
 
-            var ipAddr = window.location.hostname;
-
-            this.sendIpAddr(ipAddr);
         });
     }
     
@@ -65,22 +65,12 @@ export class Client{
         this.wsocket.send(songRequestMessage);
     }
 
-    sendIpAddr(ipAddr:String){
-        var ipMessage = this.messageFactory.createIpMessagge(ipAddr);
-        this.wsocket.send(ipMessage);
-    }
-
     initRttAndDelay(){
         for(var i = 0; i < 10; i++) {
             this.sendRTT();
         }
 
         this.sendPLAYER_DELAY();
-    }
-
-    handleIpReceived = (messageObj) => {
-        console.log("ip has been set");
-        this.initRttAndDelay();
     }
     
     handleRTTMessage = (messageObj) =>  {
@@ -114,7 +104,7 @@ export class Client{
     
     initTestAudio(src) {
 
-        this.player.setSource(src);
+        this.player.setSource(this.serverAddress + src);
         console.log("Client source is set");
 
         this.player.mute();
@@ -142,7 +132,7 @@ export class Client{
 
 
     initAudio(src, time) {
-        this.player.setSource(src);
+        this.player.setSource(this.serverAddress + src);
         console.log("Client source is set");
 
         this.player.setTime(time + (this.rtt/1000));
