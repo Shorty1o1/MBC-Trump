@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { Platform } from './player/Platform';
 import { Client } from './player/Client';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -14,6 +15,8 @@ export class AppComponent {
 
 	private isMaster : boolean = true;
 
+	private router: Router;
+
 	getClient():Client{
 		return this.client;
 	}
@@ -23,14 +26,15 @@ export class AppComponent {
 	changeMasterSlave(){
 		console.log("Master-Slave-Change ")
 		if(this.isMaster){
-			// Wechsel zur slave-component-seite
+    		this.router.navigate(['./slave']);
 		} else {
-			// Wechsel zur master-component-seite
+    		this.router.navigate(['./home']);
 		}
 	}
 
 	
-    constructor(){
+    constructor(router: Router){
+    	this.router = router;
 		 console.log("Hauptkomponente initialisiert!");
 	}
 }

@@ -5,4 +5,8 @@
 	<br />
 	<p> Currently playing: Linkin Park - Mihihi</p>
 	<br />
+	<button class="btn btn-lg btn-primary">
+		<span *ngIf="!isPlaying" class="glyphicon glyphicon-play"></span>
+		<span *ngIf="isPlaying" class="glyphicon glyphicon-stop"></span>
+	</button>
 </div>
