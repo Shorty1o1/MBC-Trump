@@ -13,9 +13,9 @@ const PLAYER_DELAY = "player_delay";
 
 export class Server {
     private static debug : boolean = true;
-    private port : number = 8080;
 
-    private timeInMs = Date.now();
+    private timeInMs : number = 0;
+    private playedTime : number = 0;
     private wSocket : WSocketServer;
 
     private messageHandler : MessageHandler;
@@ -57,28 +57,35 @@ export class Server {
 
     handleSongRequest = (messageObj, connection) => {
         var passed = (Date.now() - this.timeInMs) / 1000;
-        var json = {} as any;
         console.log(SONG_REQUEST);                    
-        json.source = this.currSong;
-        json.time = passed;
-        json.type = SONG_REQUEST;
-        connection.send(JSON.stringify(json));
+        connection.send(this.messageFactory.createPlayMessage(this.currSong, passed));
     }
 
     handleRTT = (messageObj, connection) => {
         console.log(RTT);
-        var json = messageObj;
-        connection.send(JSON.stringify(json));
+        connection.send(this.messageFactory.createRTTMessage(messageObj));
     }
 
     handlePlayerDelay = (messageObj, connection) => {
         console.log(PLAYER_DELAY);
-        var json = {} as any;
-        json.source = this.currSong;
-        json.type = PLAYER_DELAY;
-        connection.send(JSON.stringify(json));
+        connection.send(this.messageFactory.createPlayerDelayMessage(this.currSong));
     }
 
+    handlePause = (messageObj, connection) => {
+        this.playedTime = Date.now() - this.timeInMs;
+        this.wSocket.sendToAll(this.messageFactory.createPauseMessage());
+    }
+
+    handlePlay = (messageObj, connection) => {
+        this.timeInMs = Date.now() - this.playedTime;
+        var passed = (Date.now() - this.timeInMs) / 1000;
+
+        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.currSong, passed));
+    }
+
+    handleSkip = (messageObj, connection) => {
+        
+    }
     public static log(message : string) {
         if (this.debug) {
             console.log(message);
