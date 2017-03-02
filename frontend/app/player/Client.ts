@@ -1,5 +1,5 @@
 ﻿import { WSocket } from './WSocket';
-import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST, IP_RECEIVED} from './MessageFactory';
+import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST} from './MessageFactory';
 import { Player } from './Player';
 
 
@@ -27,13 +27,13 @@ export class Client{
     
     constructor(){ 
         this.messageFactory = new MessageFactory();
-        this.wsocket = new WSocket(); // TODO -> sp�ter zu player
+        this.wsocket = new WSocket(window.location.port); // TODO -> sp�ter zu player
 
         this.messageHandler = new MessageHandler(this.wsocket, this.messageFactory);
 
         this.messageHandler.addHandler("rtt", this.handleRTTMessage);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
-        this.messageHandler.addHandler("song_request", this.handleSongRequestMessage);
+        this.messageHandler.addHandler("play", this.handlePlay);
 
         console.log("Client callback for receiving messages added");
         this.player = new Player();
@@ -87,11 +87,16 @@ export class Client{
         this.initTestAudio(messageObj.source);
     }
     
-    handleSongRequestMessage = (messageObj) => {
+    handlePlay = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
         this.initAudio(messageObj.source, messageObj.time);
     }
+
+    handlePause = (messageObj) => {
+        this.player.pause();
+    }
+
 
     playPauseToggle(){
         if(this.player.getState()===Player.PAUSE){

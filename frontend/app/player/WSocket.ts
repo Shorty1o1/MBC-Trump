@@ -1,8 +1,8 @@
 export class WSocket {
     connection : WebSocket;
     
-    constructor(){
-        this.connection = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port, 'echo-protocol');
+    constructor(port:string){
+        this.connection = new WebSocket("ws://" + window.location.hostname + ":" + port, 'echo-protocol');
         console.log("Created Websocket");
     
     

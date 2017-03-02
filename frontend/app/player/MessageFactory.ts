@@ -1,7 +1,10 @@
 export const SONG_REQUEST = "song_request";
 export const RTT = "rtt";
 export const PLAYER_DELAY = "player_delay";
-export const IP_RECEIVED = "ip_message";
+export const PAUSE = "pause";
+export const PLAY = "play";
+export const SKIP = "skip";
+export const BACK = "back";
 
 export class MessageFactory {
     getMessage(message) {
@@ -25,6 +28,30 @@ export class MessageFactory {
     createSongRequestMessage() {
         var json = <any>{};
         json.type = SONG_REQUEST;
+        return JSON.stringify(json);
+    }
+
+    createPlayMessage() {
+        var json = <any>{};
+        json.type = PLAY;
+        return JSON.stringify(json);
+    }
+
+    createPauseMessage() {
+        var json = <any>{};
+        json.type = PAUSE;
+        return JSON.stringify(json);
+    }
+
+    createSkipMessage() {
+        var json = <any>{};
+        json.type = SKIP;
+        return JSON.stringify(json);
+    }
+
+    createBackMessage() {
+        var json = <any>{};
+        json.type = BACK;
         return JSON.stringify(json);
     }
 }

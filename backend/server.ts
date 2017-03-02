@@ -5,6 +5,7 @@ import serveStatic = require('serve-static');
 import { WSocketServer } from './wSocketServer';
 import { MessageHandler } from './messageHandler';
 import { MessageFactory } from './messageFactory';
+import { Playlist } from './playlist';
 
 
 const SONG_REQUEST = "song_request";
@@ -13,6 +14,7 @@ const PLAYER_DELAY = "player_delay";
 
 export class Server {
     private static debug : boolean = true;
+    private static port : number = 8080;
 
     private timeInMs : number = 0;
     private playedTime : number = 0;
@@ -21,6 +23,7 @@ export class Server {
     private messageHandler : MessageHandler;
     private messageFactory : MessageFactory;
 
+    private playlist : Playlist;
     private currSong : string = "/dusche.mp3";
 
     constructor(){
@@ -41,15 +44,20 @@ export class Server {
             }
         });
 
-        server.listen(this.port);
+        server.listen(Server.port);
 
         this.wSocket = new WSocketServer(server);
         this.messageFactory = new MessageFactory();
         this.messageHandler = new MessageHandler(this.wSocket, this.messageFactory);
+        this.playlist = new Playlist();
 
         this.messageHandler.addHandler("rtt", this.handleRTT);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelay);
         this.messageHandler.addHandler("song_request", this.handleSongRequest);
+        this.messageHandler.addHandler("play", this.handlePlay);
+        this.messageHandler.addHandler("pause", this.handleBack);
+        this.messageHandler.addHandler("skip", this.handleSkip);
+        this.messageHandler.addHandler("back", this.handleBack);
 
     }
 
@@ -83,12 +91,25 @@ export class Server {
         this.timeInMs = Date.now() - this.playedTime;
         var passed = (Date.now() - this.timeInMs) / 1000;
 
-        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.currSong, passed));
+        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
     }
 
     handleSkip = (messageObj, connection) => {
-        
+        this.playlist.nextSong();
+        this.playedTime = 0;
+        this.timeInMs = Date.now();
+        var passed = (Date.now() - this.timeInMs) / 1000;
+        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
     }
+
+    handleBack = (messageObj, connection) => {
+        this.playlist.previousSong();
+        this.playedTime = 0;
+        this.timeInMs = Date.now();
+        var passed = (Date.now() - this.timeInMs) / 1000;
+        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
+    }
+
     public static log(message : string) {
         if (this.debug) {
             console.log(message);

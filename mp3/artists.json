@@ -10,13 +10,13 @@
           {
             "title": "Bloom",
             "length": "4:07",
-            "path" : "mp3/Call_to_Adventure.mp3",
+            "path" : "/mp3/Call_to_Adventure.mp3",
             "id" : 1
           },
           {
             "title": "Cold Funk",
             "length": "4:48",
-            "path" : "mp3/Cold_Funk.mp3",
+            "path" : "/mp3/Cold_Funk.mp3",
             "id" : 2
           }
         ]
@@ -34,8 +34,8 @@
           {
             "title": "Memories",
             "length": "4:12",
-            "path" : "mp3/Memories.mp3",
-            "id" : 3,
+            "path" : "/mp3/Memories.mp3",
+            "id" : 3
           }
         ] 
       }
@@ -52,7 +52,7 @@
           {
             "title": "Whatever We Were Before",
             "length": "3:36",            
-            "path" : "mp3/Whatever_We_Were_Before.mp3",
+            "path" : "/mp3/Whatever_We_Were_Before.mp3",
             "id" : 4
           }
         ]
