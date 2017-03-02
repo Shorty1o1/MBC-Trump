@@ -36,7 +36,7 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-frontend/app/build
+frontend/build
 backend/build
 
 typings/
