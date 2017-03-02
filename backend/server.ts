@@ -55,28 +55,28 @@ export class Server {
         return true;
     }  
 
-    handleSongRequest = (messageObj) => {
+    handleSongRequest = (messageObj, connection) => {
         var passed = (Date.now() - this.timeInMs) / 1000;
         var json = {} as any;
         console.log(SONG_REQUEST);                    
         json.source = this.currSong;
         json.time = passed;
         json.type = SONG_REQUEST;
-        this.wSocket.send(json);
+        connection.send(JSON.stringify(json));
     }
 
-    handleRTT = (messageObj) => {
+    handleRTT = (messageObj, connection) => {
         console.log(RTT);
         var json = messageObj;
-        this.wSocket.send(json);
+        connection.send(JSON.stringify(json));
     }
 
-    handlePlayerDelay = (messageObj) => {
+    handlePlayerDelay = (messageObj, connection) => {
         console.log(PLAYER_DELAY);
         var json = {} as any;
         json.source = this.currSong;
         json.type = PLAYER_DELAY;
-        this.wSocket.send(json);
+        connection.send(JSON.stringify(json));
     }
 
     public static log(message : string) {

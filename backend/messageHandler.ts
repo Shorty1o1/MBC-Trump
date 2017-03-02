@@ -8,18 +8,16 @@ export class MessageHandler{
 
     constructor(socket : WSocketServer, messageFactory : MessageFactory){
         this.messageFactory = messageFactory;
-        socket.addTextMessageHandler((message) => {
-            this.handleMessages(message);
-        });
+        socket.addTextMessageHandler(this.handleMessages);
     }
 
-    handleMessages(message) {
+    handleMessages = (message, connection) => {
         if (message.utf8Data) {
             Server.log("Client Got message " + message.utf8Data);
             try {
                 var messageObj = this.messageFactory.getMessage(message.utf8Data);
                 for(let handler of this.handler[messageObj.type]){
-                    handler(messageObj);
+                    handler(messageObj, connection);
                 }
             } catch (err) {
                 Server.log( "ERROR: " + err);
