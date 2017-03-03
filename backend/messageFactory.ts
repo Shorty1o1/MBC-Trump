@@ -28,7 +28,7 @@ export class MessageFactory {
 
     createPlayMessage(src : string, time : number) {
         var json = <any>{};
-        json.type = SONG_REQUEST;
+        json.type = PLAY;
         json.source = src;
         json.time = time;
         return JSON.stringify(json);

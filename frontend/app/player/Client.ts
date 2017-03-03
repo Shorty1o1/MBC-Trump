@@ -1,6 +1,7 @@
 ﻿import { WSocket } from './WSocket';
 import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST} from './MessageFactory';
 import { Player } from './Player';
+import { Master} from './master';
 
 
 
@@ -42,11 +43,17 @@ export class Client{
         console.log("Client Audio element created");
 
         this.serverAddress = "http://" + window.location.hostname + ":" + window.location.port;
+
+        var master = new Master();
+
+        window.setTimeout( () => {
+            master.play();
+        }, 5000);
+
         
         this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
-            this.initRttAndDelay();         
-
+            this.initRttAndDelay();
         });
     }
     

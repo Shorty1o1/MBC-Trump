@@ -18,9 +18,11 @@ export class Server {
 
     private timeInMs : number = 0;
     private playedTime : number = 0;
-    private wSocket : WSocketServer;
+    private clientWSocket : WSocketServer;
+    private masterWSocket : WSocketServer;
 
     private messageHandler : MessageHandler;
+    private masterMessageHandler : MessageHandler;
     private messageFactory : MessageFactory;
 
     private playlist : Playlist;
@@ -46,18 +48,23 @@ export class Server {
 
         server.listen(Server.port);
 
-        this.wSocket = new WSocketServer(server);
+        var masterServer = http.createServer();
+        masterServer.listen(8081);
+
+        this.clientWSocket = new WSocketServer(server);
+        this.masterWSocket = new WSocketServer(masterServer);
         this.messageFactory = new MessageFactory();
-        this.messageHandler = new MessageHandler(this.wSocket, this.messageFactory);
+        this.messageHandler = new MessageHandler(this.clientWSocket, this.messageFactory);
+        this.masterMessageHandler = new MessageHandler(this.masterWSocket, this.messageFactory);
         this.playlist = new Playlist();
 
         this.messageHandler.addHandler("rtt", this.handleRTT);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelay);
         this.messageHandler.addHandler("song_request", this.handleSongRequest);
-        this.messageHandler.addHandler("play", this.handlePlay);
-        this.messageHandler.addHandler("pause", this.handleBack);
-        this.messageHandler.addHandler("skip", this.handleSkip);
-        this.messageHandler.addHandler("back", this.handleBack);
+        this.masterMessageHandler.addHandler("play", this.handlePlay);
+        this.masterMessageHandler.addHandler("pause", this.handleBack);
+        this.masterMessageHandler.addHandler("skip", this.handleSkip);
+        this.masterMessageHandler.addHandler("back", this.handleBack);
 
     }
 
@@ -84,14 +91,15 @@ export class Server {
 
     handlePause = (messageObj, connection) => {
         this.playedTime = Date.now() - this.timeInMs;
-        this.wSocket.sendToAll(this.messageFactory.createPauseMessage());
+        this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage());
     }
 
     handlePlay = (messageObj, connection) => {
+        console.log("handle play by master");
         this.timeInMs = Date.now() - this.playedTime;
         var passed = (Date.now() - this.timeInMs) / 1000;
 
-        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
     }
 
     handleSkip = (messageObj, connection) => {
@@ -99,7 +107,7 @@ export class Server {
         this.playedTime = 0;
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
+        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
     }
 
     handleBack = (messageObj, connection) => {
@@ -107,7 +115,7 @@ export class Server {
         this.playedTime = 0;
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.wSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
+        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
     }
 
     public static log(message : string) {
