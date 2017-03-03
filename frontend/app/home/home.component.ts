@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {Http} from '@angular/http';
-import {AppComponent} from "../app.component";
-import {Client} from '../player/Client';
-import {SpotifyCoverArtwork, IGetAlbumCover} from '../player/SpotifyCoverArtwork';
-
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
+import { AppComponent } from "../app.component";
+import { Client} from '../player/Client';
+import { SpotifyCoverArtwork, IGetAlbumCover } from '../player/SpotifyCoverArtwork';
+ 
 @Component({
     selector: 'app-home',	
     templateUrl: 'app/home/home.html'
@@ -50,7 +50,6 @@ export class HomeComponent {
 	}
 	
 	coverReveicedCallbackFunction() : Function {
-		console.log("WAS DA LOS!?")
 		return (function(coverLink: String){
 			if(coverLink != ""){
 				this.albumCoverLink = coverLink;
