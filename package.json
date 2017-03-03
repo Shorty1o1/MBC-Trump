@@ -6,9 +6,9 @@
   "scripts": {
     "start": "npm run tscBackend && concurrently \"npm run tscWFrontend\" \"node backend/build/server\" ",
     "postinstall": "typings install",
-    "tsc": "tsc --p tsconfigFrontend.json && tsc --p tsconfigBackend.json",
-    "tscBackend": "tsc --p tsconfigBackend.json",
-    "tscWFrontend": "tsc -w --p tsconfigFrontend.json",
+    "tsc": "tsc --p frontend/tsconfig.json && tsc --p backend/tsconfig.json",
+    "tscBackend": "tsc --p backend/tsconfig.json",
+    "tscWFrontend": "tsc -w --p frontend/tsconfig.json",
     "typings": "typings"
   },
   "keywords": [],
