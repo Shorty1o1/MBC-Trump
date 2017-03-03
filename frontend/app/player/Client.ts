@@ -35,6 +35,7 @@ export class Client{
         this.messageHandler.addHandler("rtt", this.handleRTTMessage);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
         this.messageHandler.addHandler("play", this.handlePlay);
+        this.messageHandler.addHandler("pause", this.handlePause);
 
         console.log("Client callback for receiving messages added");
         this.player = new Player();
@@ -73,11 +74,8 @@ export class Client{
     }
 
     initRttAndDelay(){
-        for(var i = 0; i < 10; i++) {
-            this.sendRTT();
-        }
-
-        this.sendPLAYER_DELAY();
+        this.sendRTT();
+        //this.sendPLAYER_DELAY();
     }
     
     handleRTTMessage = (messageObj) =>  {
@@ -86,6 +84,12 @@ export class Client{
         this.rttSum += ((receivedTime - sentTime) / 2);
         this.rttCounter++;
         this.rtt = this.rttSum / this.rttCounter;
+        if(this.rttCounter < 10){
+            this.sendRTT();
+        }else{
+            this.sendSONG_REQUEST();
+        }
+
         console.log(this.rtt);
     }
     
@@ -150,8 +154,11 @@ export class Client{
         this.player.setTime(time + (this.rtt/1000));
         console.log("Client time is set");
 
-        this.player.start();
-        console.log(Date.now() - this.firstTimeTemp);
+        window.setTimeout(() => {
+            this.player.start();
+            console.log(Date.now() - this.firstTimeTemp);
+        },1000);
+
 
     }
 

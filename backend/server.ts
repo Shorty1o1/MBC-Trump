@@ -18,6 +18,7 @@ export class Server {
 
     private timeInMs : number = 0;
     private playedTime : number = 0;
+    private isPlaying : boolean = false;
     private clientWSocket : WSocketServer;
     private masterWSocket : WSocketServer;
 
@@ -73,9 +74,14 @@ export class Server {
     }  
 
     handleSongRequest = (messageObj, connection) => {
-        var passed = (Date.now() - this.timeInMs) / 1000;
-        console.log(SONG_REQUEST);                    
-        connection.send(this.messageFactory.createPlayMessage(this.currSong, passed));
+        if(this.isPlaying){
+            var passed = (Date.now() - this.timeInMs) / 1000;
+            console.log(SONG_REQUEST + "play");
+            connection.send(this.messageFactory.createPlayMessage(this.currSong, passed));
+        }else{
+            connection.send(this.messageFactory.createPauseMessage());
+        }
+        
     }
 
     handleRTT = (messageObj, connection) => {
