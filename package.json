@@ -6,9 +6,9 @@
   "scripts": {
     "start": "npm run tscBackend && concurrently \"npm run tscWFrontend\" \"node backend/build/server\" ",
     "postinstall": "typings install",
-    "tsc": "tsc --p tsconfigFrontend.json && tsc --p tsconfigBackend.json",
-    "tscBackend": "tsc --p tsconfigBackend.json",
-    "tscWFrontend": "tsc -w --p tsconfigFrontend.json",
+    "tsc": "tsc --p frontend/tsconfig.json && tsc --p backend/tsconfig.json",
+    "tscBackend": "tsc --p backend/tsconfig.json",
+    "tscWFrontend": "tsc -w --p frontend/tsconfig.json",
     "typings": "typings"
   },
   "keywords": [],
@@ -24,19 +24,18 @@
     "@angular/platform-browser": "~2.4.0",
     "@angular/platform-browser-dynamic": "~2.4.0",
     "@angular/router": "~3.4.0",
-
     "angular-in-memory-web-api": "~0.2.4",
     "systemjs": "0.19.40",
     "core-js": "^2.4.1",
     "rxjs": "5.0.1",
     "zone.js": "^0.7.4",
     "reflect-metadata": "^0.1.8",
-
     "serve-static": "^1.11.2",
     "finalhandler": "^1.0.0",
     "websocket": "^1.0.24"
   },
   "devDependencies": {
+    "@types/node": "^7.0.5",
     "concurrently": "^3.1.0",
     "typescript": "^2.0.3",
     "typings": "^1.4.0"
