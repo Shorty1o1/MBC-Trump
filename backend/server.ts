@@ -33,7 +33,7 @@ export class Server {
 
         let serve           = serveStatic("./frontend/");   // Pfad zur index.html (typescript-ordner)     
         let serveModules    = serveStatic("./");
-        let serveMp3        = serveStatic("./mp3/");
+        let serveMp3        = serveStatic("./");
 
         var server = http.createServer(function(req, res) { // Todo: extra function fuer machen wie in handleRequest()
             var done = finalhandler(req, res);
