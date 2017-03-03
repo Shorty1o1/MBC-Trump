@@ -1,6 +1,7 @@
 ﻿import { WSocket } from './WSocket';
-import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST, IP_RECEIVED} from './MessageFactory';
+import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST} from './MessageFactory';
 import { Player } from './Player';
+import { Master} from './master';
 
 
 
@@ -23,30 +24,37 @@ export class Client{
     private stateChangedEventFunction:Function;
     private firstTimeTemp : number = 0;
     private timeAtStartPlayerDelay : number = 0;
+    private serverAddress : string;
     
     constructor(){ 
         this.messageFactory = new MessageFactory();
-        this.wsocket = new WSocket(); // TODO -> sp�ter zu player
+        this.wsocket = new WSocket(window.location.port); // TODO -> sp�ter zu player
 
         this.messageHandler = new MessageHandler(this.wsocket, this.messageFactory);
 
         this.messageHandler.addHandler("rtt", this.handleRTTMessage);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
-        this.messageHandler.addHandler("song_request", this.handleSongRequestMessage);
-        this.messageHandler.addHandler("ip_message", this.handleIpReceived);
+        this.messageHandler.addHandler("play", this.handlePlay);
+        this.messageHandler.addHandler("pause", this.handlePause);
 
         console.log("Client callback for receiving messages added");
         this.player = new Player();
 
         this.player.createAudioElem();
         console.log("Client Audio element created");
+
+        this.serverAddress = "http://" + window.location.hostname + ":" + window.location.port;
+
+        var master = new Master();
+
+        window.setTimeout( () => {
+            master.play();
+        }, 5000);
+
         
         this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
-
-            var ipAddr = window.location.hostname;
-
-            this.sendIpAddr(ipAddr);
+            this.initRttAndDelay();
         });
     }
     
@@ -65,22 +73,9 @@ export class Client{
         this.wsocket.send(songRequestMessage);
     }
 
-    sendIpAddr(ipAddr:String){
-        var ipMessage = this.messageFactory.createIpMessagge(ipAddr);
-        this.wsocket.send(ipMessage);
-    }
-
     initRttAndDelay(){
-        for(var i = 0; i < 10; i++) {
-            this.sendRTT();
-        }
-
-        this.sendPLAYER_DELAY();
-    }
-
-    handleIpReceived = (messageObj) => {
-        console.log("ip has been set");
-        this.initRttAndDelay();
+        this.sendRTT();
+        //this.sendPLAYER_DELAY();
     }
     
     handleRTTMessage = (messageObj) =>  {
@@ -89,6 +84,12 @@ export class Client{
         this.rttSum += ((receivedTime - sentTime) / 2);
         this.rttCounter++;
         this.rtt = this.rttSum / this.rttCounter;
+        if(this.rttCounter < 10){
+            this.sendRTT();
+        }else{
+            this.sendSONG_REQUEST();
+        }
+
         console.log(this.rtt);
     }
     
@@ -97,11 +98,16 @@ export class Client{
         this.initTestAudio(messageObj.source);
     }
     
-    handleSongRequestMessage = (messageObj) => {
+    handlePlay = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
         this.initAudio(messageObj.source, messageObj.time);
     }
+
+    handlePause = (messageObj) => {
+        this.player.pause();
+    }
+
 
     playPauseToggle(){
         if(this.player.getState()===Player.PAUSE){
@@ -114,7 +120,7 @@ export class Client{
     
     initTestAudio(src) {
 
-        this.player.setSource(src);
+        this.player.setSource(this.serverAddress + src);
         console.log("Client source is set");
 
         this.player.mute();
@@ -142,14 +148,17 @@ export class Client{
 
 
     initAudio(src, time) {
-        this.player.setSource(src);
+        this.player.setSource(this.serverAddress + src);
         console.log("Client source is set");
 
         this.player.setTime(time + (this.rtt/1000));
         console.log("Client time is set");
 
-        this.player.start();
-        console.log(Date.now() - this.firstTimeTemp);
+        window.setTimeout(() => {
+            this.player.start();
+            console.log(Date.now() - this.firstTimeTemp);
+        },1000);
+
 
     }
 
