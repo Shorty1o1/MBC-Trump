@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { AppComponent } from "../app.component";
-import { Client} from '../player/Client';
+import { Client } from '../player/Client';
 import { SpotifyCoverArtwork, IGetAlbumCover } from '../player/SpotifyCoverArtwork';
- 
+
 @Component({
-    selector: 'app-home',	
-    templateUrl: 'app/home/home.html'
+    selector: 'app-slave',	
+    templateUrl: 'app/slave/slave.html'
 })
 
-export class HomeComponent {
+export class SlaveComponent {
 	private client:Client;
 	private coverGetter : IGetAlbumCover;
 	private trumpCoverLink : string = "../trumpCover.png"
