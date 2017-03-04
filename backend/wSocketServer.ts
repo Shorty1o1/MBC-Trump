@@ -31,6 +31,7 @@ export class WSocketServer{
         }else if(this.isMaster == 1){
             if(this.connections.length == 1 ){
                 var connection = request.reject();
+                console.log("Master request has been denied!!!!!!");
             }else{
                 var connection = request.accept('echo-protocol', request.origin);
                 this.connections.push(connection);

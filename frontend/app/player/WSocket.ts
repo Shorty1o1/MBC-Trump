@@ -14,6 +14,7 @@ export class WSocket {
         this.connection.onopen = function(message) {
             console.log("Websocket to server is established");
         }
+        
     }
     
     addConnectionOpenCallback = function(callback) {

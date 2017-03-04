@@ -51,7 +51,7 @@ export class Client{
             master.play();
         }, 5000);
 
-        
+
         this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
             this.initRttAndDelay();
