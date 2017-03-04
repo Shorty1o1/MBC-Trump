@@ -5,14 +5,13 @@
 	<br />
 	<p> Currently playing: Linkin Park - Mihihi</p>
 	<br />
-	<button class="btn btn-lg btn-primary" >
+	<button class="btn btn-lg btn-primary" (click)="backwardSkip()">
 		<span class="glyphicon glyphicon-step-backward"></span>
 	</button>
-	<button class="btn btn-lg btn-primary" (click)="pause()">		
-		<span *ngIf="!isPlaying" class="glyphicon glyphicon-play"></span>
-		<span *ngIf="isPlaying" class="glyphicon glyphicon-pause"></span>
+	<button #toggleButton class="btn btn-lg btn-primary" (click)="toggle()">
+		<span class="glyphicon glyphicon-play"></span>
 	</button>
-	<button class="btn btn-lg btn-primary" (click)="pause()">
+	<button class="btn btn-lg btn-primary" (click)="toggle()">
 		<span class="glyphicon glyphicon-stop"></span>
 	</button>
 	<button class="btn btn-lg btn-primary" (click)="skip()">
