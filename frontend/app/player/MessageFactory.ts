@@ -1,65 +1,63 @@
-export const SONG_REQUEST = "song_request";
-export const RTT = "rtt";
-export const PLAYER_DELAY = "player_delay";
-export const PAUSE = "pause";
-export const PLAY = "play";
-export const SKIP = "skip";
-export const BACK = "back";
-
 export class MessageFactory {
-
     public static IS_PLAYING_REQUEST: string = "is_playing_request";
     public static IS_PLAYING_RESPONSE: string = "is_playing_response";
+    public static SONG_REQUEST: string = "song_request";
+    public static RTT: string = "rtt";
+    public static PLAYER_DELAY: string = "player_delay";
+    public static PAUSE: string = "pause";
+    public static PLAY: string = "play";
+    public static SKIP: string = "skip";
+    public static BACK: string = "back";
 
-    getMessage(message) {
+    public static getMessage(message) {
         return JSON.parse(message);
     }
 
-    createRTTMessage(): string {
+    public static createRTTMessage(): string {
         var json: any = {};
-        json.type = RTT;
+        json.type = MessageFactory.RTT;
         json.sentTime = Date.now();
         //OF maybe add some other fields here;
         return JSON.stringify(json);
     }
 
-    createPlayerDelayMessage(): string {
+    public static createPlayerDelayMessage(): string {
         var json: any = {};
-        json.type = PLAYER_DELAY;
+        json.type = MessageFactory.PLAYER_DELAY;
         return JSON.stringify(json);
     }
 
-    createSongRequestMessage(): string {
+    public static createSongRequestMessage(): string {
         var json: any = {};
-        json.type = SONG_REQUEST;
+        json.type = MessageFactory.SONG_REQUEST;
         return JSON.stringify(json);
     }
 
-    createPlayMessage(): string {
+    public static createPlayMessage(): string {
         var json: any = {};
-        json.type = PLAY;
+        json.type = MessageFactory.PLAY;
         return JSON.stringify(json);
     }
 
-    createPauseMessage(): string {
+    public static createPauseMessage(): string {
         var json: any = {};
-        json.type = PAUSE;
+        json.type = MessageFactory.PAUSE;
         return JSON.stringify(json);
     }
 
-    createSkipMessage(): string {
+    public static createSkipMessage(): string {
         var json: any = {};
-        json.type = SKIP;
+        json.type = MessageFactory.SKIP;
         return JSON.stringify(json);
     }
 
-    createBackMessage(): string {
+    public static createBackMessage(): string {
         var json: any = {};
-        json.type = BACK;
+        json.type = MessageFactory.BACK;
         return JSON.stringify(json);
     }
 
-    public createIsPlayingRequestMessage(): string {
+    public static createIsPlayingRequestMessage(): string {
         var json: any = {};
         json.type = MessageFactory.IS_PLAYING_REQUEST;
         return JSON.stringify(json);
