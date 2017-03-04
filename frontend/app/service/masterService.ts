@@ -37,8 +37,7 @@ export class MasterService {
     }
 
     public isPlayingRequest(callback: Function): void {
-        //OF TODO work in progress....
-        if (this.wSocket.connection.CONNECTING === this.wSocket.connection.CONNECTING) {
+        if (this.wSocket.connection.readyState === this.wSocket.connection.CONNECTING) {
             this.wSocket.connection.onopen = () => {
                 this.sendIsPlayingRequest(callback);
             }
