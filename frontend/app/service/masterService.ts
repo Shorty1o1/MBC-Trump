@@ -46,4 +46,12 @@ export class MasterService {
         this.wSocket.send(MessageFactory.createIsPlayingRequestMessage());
         this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
     }
+
+    public releaseWS(): void {
+        this.wSocket.connection.close();
+    }
+
+    public connectWS(): void {
+        this.wSocket = new WSocket("8081");
+    }
 }
