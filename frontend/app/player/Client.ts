@@ -1,32 +1,24 @@
-﻿import { WSocket } from './WSocket';
-import { MessageFactory, RTT, PLAYER_DELAY, SONG_REQUEST} from './MessageFactory';
-import { Player } from './Player';
-import { Master} from './master';
-
-
-
+﻿import {WSocket} from "./WSocket";
+import {MessageFactory} from "./MessageFactory";
+import {Player} from "./Player";
 // client class doing some stuff
-
-import {first} from "rxjs/operator/first";
-import { MessageHandler } from './messageHandler'
+import {MessageHandler} from "./messageHandler";
 
 
+export class Client {
+    private wsocket: WSocket;
+    private messageFactory: MessageFactory;
+    private player: Player;
+    private messageHandler: MessageHandler;
+    private rtt: number = 0;
+    private rttSum: number = 0;
+    private rttCounter: number = 0;
+    private stateChangedEventFunction: Function;
+    private firstTimeTemp: number = 0;
+    private timeAtStartPlayerDelay: number = 0;
+    private serverAddress: string;
 
-
-export class Client{    
-    private wsocket : WSocket;
-    private messageFactory : MessageFactory;
-    private player : Player;
-    private messageHandler : MessageHandler;
-    private rtt : number = 0;
-    private rttSum : number = 0;
-    private rttCounter : number = 0;
-    private stateChangedEventFunction:Function;
-    private firstTimeTemp : number = 0;
-    private timeAtStartPlayerDelay : number = 0;
-    private serverAddress : string;
-    
-    constructor(){ 
+    constructor() {
         this.messageFactory = new MessageFactory();
         this.wsocket = new WSocket(window.location.port); // TODO -> sp�ter zu player
 
@@ -45,59 +37,52 @@ export class Client{
 
         this.serverAddress = "http://" + window.location.hostname + ":" + window.location.port;
 
-        var master = new Master();
-
-        window.setTimeout( () => {
-            master.play();
-        }, 5000);
-
-
         this.wsocket.addConnectionOpenCallback((event) => {
             console.log("Client Connection to server established");
             this.initRttAndDelay();
         });
     }
-    
+
     sendRTT() {
         var rttMessage = this.messageFactory.createRTTMessage();
         this.wsocket.send(rttMessage);
     }
-    
-    sendPLAYER_DELAY(){
+
+    sendPLAYER_DELAY() {
         var playerDelayMessage = this.messageFactory.createPlayerDelayMessage();
         this.wsocket.send(playerDelayMessage);
     }
-    
-    sendSONG_REQUEST(){
+
+    sendSONG_REQUEST() {
         var songRequestMessage = this.messageFactory.createSongRequestMessage();
         this.wsocket.send(songRequestMessage);
     }
 
-    initRttAndDelay(){
+    initRttAndDelay() {
         this.sendRTT();
         //this.sendPLAYER_DELAY();
     }
-    
-    handleRTTMessage = (messageObj) =>  {
+
+    handleRTTMessage = (messageObj) => {
         var sentTime = messageObj.sentTime;
         var receivedTime = Date.now();
         this.rttSum += ((receivedTime - sentTime) / 2);
         this.rttCounter++;
         this.rtt = this.rttSum / this.rttCounter;
-        if(this.rttCounter < 10){
+        if (this.rttCounter < 10) {
             this.sendRTT();
-        }else{
+        } else {
             this.sendSONG_REQUEST();
         }
 
         console.log(this.rtt);
     }
-    
+
     handlePlayerDelayMessage = (messageObj) => {
         console.log("received PlayerDelayMessage");
         this.initTestAudio(messageObj.source);
     }
-    
+
     handlePlay = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
@@ -109,15 +94,15 @@ export class Client{
     }
 
 
-    playPauseToggle(){
-        if(this.player.getState()===Player.PAUSE){
+    playPauseToggle() {
+        if (this.player.getState() === Player.PAUSE) {
             this.player.start();
         } else {
             this.player.pause();
         }
         this.stateChangedEventFunction(this.player.getState());
     }
-    
+
     initTestAudio(src) {
 
         this.player.setSource(this.serverAddress + src);
@@ -127,9 +112,9 @@ export class Client{
         this.player.start();
         this.timeAtStartPlayerDelay = Date.now();
 
-    
-        window.setTimeout(() =>{
-            var delay : number = ((Date.now() - this.timeAtStartPlayerDelay)/1000) - (this.player.getCurrentTime());
+
+        window.setTimeout(() => {
+            var delay: number = ((Date.now() - this.timeAtStartPlayerDelay) / 1000) - (this.player.getCurrentTime());
             this.player.setDelay(delay);
             this.player.pause();
             this.player.unmute();
@@ -151,18 +136,19 @@ export class Client{
         this.player.setSource(this.serverAddress + src);
         console.log("Client source is set");
 
-        this.player.setTime(time + (this.rtt/1000));
+        this.player.setTime(time + (this.rtt / 1000));
         console.log("Client time is set");
 
         window.setTimeout(() => {
             this.player.start();
             console.log(Date.now() - this.firstTimeTemp);
-        },1000);
+        }, 1000);
 
 
     }
 
-    addChangeEventHandler(callback:Function){
+    addChangeEventHandler(callback: Function) {
         this.stateChangedEventFunction = callback;
     }
-};
+}
+;

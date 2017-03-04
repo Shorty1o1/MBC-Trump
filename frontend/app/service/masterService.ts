@@ -13,18 +13,23 @@ export class MasterService {
     }
 
     public sendBackwardSkip(): void {
-        
+
     }
 
     public sendPlay(): void {
-
+        this.master.play();
     }
 
     public sendPause(): void {
-
+        this.master.pause();
     }
 
     public sendSkip(): void {
 
+    }
+
+    public getPlayerState(): string {
+        //OF TODO get real state from backend
+        return "pause";
     }
 }

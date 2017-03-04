@@ -9,13 +9,14 @@ import {MasterService} from "../service/masterService";
 
 export class HomeComponent {
 
-    private static PLAY_BUTTON_CLASS: String = "glyphicon glyphicon-play";
-    private static PAUSE_BUTTON_CLASS: String = "glyphicon glyphicon-pause";
+    private static PLAY_BUTTON_CLASS: string = "glyphicon glyphicon-play";
+    private static PAUSE_BUTTON_CLASS: string = "glyphicon glyphicon-pause";
+
+    private albumCoverLink: string = "../trumpCover.png";
 
 
     @ViewChild('toggleButton')
-    private playPauseButton: ElementRef;
-    private toggleButton: HTMLButtonElement;
+    private toggleButton: ElementRef;
     private isPlaying: Boolean = false;
 
     constructor(private http: Http, private masterService: MasterService) {
@@ -23,7 +24,8 @@ export class HomeComponent {
     };
 
     ngAfterViewInit(): void {
-        this.toggleButton = this.playPauseButton.nativeElement as HTMLButtonElement;
+        this.isPlaying = this.masterService.getPlayerState() === "play";
+        this.updateToggleButton();
     }
 
     private skip(): void {
@@ -35,11 +37,21 @@ export class HomeComponent {
     }
 
     private toggle(): void {
-        if ("play" == "play") {
+        if (this.isPlaying) {
             this.masterService.sendPause();
         } else {
             this.masterService.sendPlay();
         }
+        this.isPlaying = !this.isPlaying;
+        this.updateToggleButton();
+    }
+
+    private updateToggleButton(): void {
+        let state = HomeComponent.PLAY_BUTTON_CLASS;
+        if (this.isPlaying) {
+            state = HomeComponent.PAUSE_BUTTON_CLASS;
+        }
+        this.toggleButton.nativeElement.className = state;
     }
 
 
