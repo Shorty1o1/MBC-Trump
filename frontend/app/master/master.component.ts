@@ -4,10 +4,10 @@ import {MasterService} from "../service/masterService";
 
 @Component({
     selector: 'app-home',
-    templateUrl: 'app/home/home.html'
+    templateUrl: 'app/master/master.html'
 })
 
-export class HomeComponent {
+export class MasterComponent {
 
     private static PLAY_BUTTON_CLASS: string = "glyphicon glyphicon-play";
     private static PAUSE_BUTTON_CLASS: string = "glyphicon glyphicon-pause";
@@ -52,9 +52,9 @@ export class HomeComponent {
 
     private updateToggleButton(): void {
         console.log("STATE " + this.isPlaying);
-        let state = HomeComponent.PLAY_BUTTON_CLASS;
+        let state = MasterComponent.PLAY_BUTTON_CLASS;
         if (this.isPlaying) {
-            state = HomeComponent.PAUSE_BUTTON_CLASS;
+            state = MasterComponent.PAUSE_BUTTON_CLASS;
         }
         this.toggleButton.nativeElement.className = state;
     }
