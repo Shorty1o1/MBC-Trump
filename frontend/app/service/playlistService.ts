@@ -1,15 +1,15 @@
 import {Injectable} from "@angular/core";
-import {Master} from "../player/master";
+import {MasterService} from "../service/masterService";
 import {Http} from "@angular/http" // Todo weg
 
 
 export class PlaylistService {
 	private library : Artist [];
-    private master: Master;
     private playlist: Song[];
+    private masterService: MasterService;
 
-    constructor(private http:Http) {
-        this.master = new Master();
+    constructor(private http:Http, private masterService: MasterService) {
+    	this.masterService = masterService;
         this.library = [];
         this.playlist = []
         // Todo: Master (oder masterservice? ) holen

@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {MessageFactory} from "../player/MessageFactory";
 import {WSocket} from "../player/WSocket";
 import {MessageHandler} from "../player/messageHandler";
+import {Artist, Album, Song} from "./playlistService";
+
 /**
  * Created by motation on 04.03.2017.
  */
@@ -50,4 +52,17 @@ export class MasterService {
         this.wSocket.send(this.messageFactory.createIsPlayingRequestMessage());
         this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
     }
+
+    private sendSetSetPlaylist(songs: Song[]) {
+
+    }
+
+    private sendGetPlaylistRequest() : void {
+
+    }
+
+    private sendGetLibraryRequest(): void{
+
+    }
+
 }

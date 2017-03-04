@@ -6,7 +6,14 @@ export const PLAY = "play";
 export const SKIP = "skip";
 export const BACK = "back";
 
+
+
 export class MessageFactory {
+    public static LIBRARY_RESPONSE: string = "library_response";
+    public static LIBRARY_REQUEST: string = "library_request";
+    public static PLAYLIST_REQUEST: string = "playlist_request";
+    public static PLAYLIST_RESPONSE: string = "playlist_response";
+    public static SET_PLAYLIST: string = "set_playlist"
 
     public static IS_PLAYING_REQUEST: string = "is_playing_request";
     public static IS_PLAYING_RESPONSE: string = "is_playing_response";
@@ -62,6 +69,24 @@ export class MessageFactory {
     public createIsPlayingRequestMessage(): string {
         var json: any = {};
         json.type = MessageFactory.IS_PLAYING_REQUEST;
+        return JSON.stringify(json);
+    }
+
+    public createLibraryRequestMessage(): string {
+        var json: any = {};
+        json.type = MessageFactory.LIBRARY_REQUEST;
+        return JSON.stringify(json);
+    }
+
+    public createPlaylistRequestMessage(): string {
+        var json: any = {};
+        json.type = MessageFactory.PLAYLIST_REQUEST;
+        return JSON.stringify(json);
+    }
+
+    public createSetPlaylistMessage(): string {
+        var json: any = {};
+        json.type = MessageFactory.SET_PLAYLIST;
         return JSON.stringify(json);
     }
 }
