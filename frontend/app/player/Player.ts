@@ -1,7 +1,7 @@
 export class Player {
 
-    public static PLAY: String = "play";
-    public static PAUSE: String = "pause";
+    public static PLAY: string = "play";
+    public static PAUSE: string = "pause";
 
     private audio;
     private state = Player.PAUSE;
@@ -62,6 +62,10 @@ export class Player {
 
     getState(): String {
         return this.state;
+    }
+
+    isMuted(): Boolean {
+        return this.audio.muted === true;
     }
 
 }   

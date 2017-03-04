@@ -29,7 +29,7 @@ export class SlaveComponent {
     }
 
     private toggle(): void {
-        this.client.playPauseToggle();
+        this.client.toggleMute();
         this.isPlaying = !this.isPlaying;
         this.updateToggleButton();
     }

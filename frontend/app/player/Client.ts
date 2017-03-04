@@ -99,6 +99,15 @@ export class Client {
         }
     }
 
+    public toggleMute(): void {
+        if (this.player.isMuted()) {
+            this.player.unmute();
+        } else {
+            this.player.mute()
+        }
+    }
+
+
     public isPlaying(): Boolean {
         return this.player.getState() === Player.PLAY;
     }
