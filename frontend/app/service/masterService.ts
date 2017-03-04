@@ -25,8 +25,7 @@ export class MasterService {
     }
 
     public skip(): void {
-        console.log(this.wSocket.connection.readyState);
-        // this.wSocket.send(MessageFactory.createSkipMessage());
+        this.wSocket.send(MessageFactory.createSkipMessage());
     }
 
     public backward(): void {
