@@ -52,8 +52,8 @@ export class Server {
         var masterServer = http.createServer();
         masterServer.listen(8081);
 
-        this.clientWSocket = new WSocketServer(server);
-        this.masterWSocket = new WSocketServer(masterServer);
+        this.clientWSocket = new WSocketServer(server, 0);
+        this.masterWSocket = new WSocketServer(masterServer, 1);
         this.messageFactory = new MessageFactory();
         this.messageHandler = new MessageHandler(this.clientWSocket, this.messageFactory);
         this.masterMessageHandler = new MessageHandler(this.masterWSocket, this.messageFactory);

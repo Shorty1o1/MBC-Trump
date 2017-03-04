@@ -2,10 +2,10 @@
 export class WSocketServer{
     callbackFunction : Function;
     connections = [];
-    numberOfConnections : number = 0;
-    constructor(httpServer, numberOfConnections : number){
+    isMaster : number = 0;
+    constructor(httpServer, isMaster : number){
         var WebSocketServer = require('websocket').server;
-        this.numberOfConnections = numberOfConnections;
+        this.isMaster = isMaster;
         var server = new WebSocketServer({
             httpServer : httpServer,
             autoAcceptConnections : false
@@ -16,7 +16,7 @@ export class WSocketServer{
 
     handleRequest = (request) => {
 
-        if(this.numberOfConnections == 0){
+        if(this.isMaster == 0){
             var connection = request.accept('echo-protocol', request.origin);
             this.connections.push(connection);
 
@@ -28,7 +28,7 @@ export class WSocketServer{
                 var index = this.connections.indexOf(connection);
                 this.connections.splice(index, 1);
             })
-        }else if(this.numberOfConnections == 1){
+        }else if(this.isMaster == 1){
             if(this.connections.length == 1 ){
                 var connection = request.reject();
             }else{
