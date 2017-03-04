@@ -24,23 +24,26 @@ export class HomeComponent {
     };
 
     ngAfterViewInit(): void {
-        this.isPlaying = this.masterService.getPlayerState() === "play";
-        this.updateToggleButton();
+        let callback = (isPlaying: Boolean) => {
+            this.isPlaying = isPlaying;
+            this.updateToggleButton();
+        }
+        this.masterService.isPlayingRequest(callback);
     }
 
     private skip(): void {
-        this.masterService.sendSkip();
+        this.masterService.skip();
     }
 
     private backwardSkip(): void {
-        this.masterService.sendBackwardSkip();
+        this.masterService.backward();
     }
 
     private toggle(): void {
         if (this.isPlaying) {
-            this.masterService.sendPause();
+            this.masterService.pause();
         } else {
-            this.masterService.sendPlay();
+            this.masterService.play();
         }
         this.isPlaying = !this.isPlaying;
         this.updateToggleButton();

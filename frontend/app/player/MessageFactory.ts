@@ -7,51 +7,61 @@ export const SKIP = "skip";
 export const BACK = "back";
 
 export class MessageFactory {
+
+    public static IS_PLAYING_REQUEST: string = "is_playing_request";
+    public static IS_PLAYING_RESPONSE: string = "is_playing_response";
+
     getMessage(message) {
         return JSON.parse(message);
     }
 
-    createRTTMessage() {
-        var json = <any>{};
+    createRTTMessage(): string {
+        var json: any = {};
         json.type = RTT;
         json.sentTime = Date.now();
         //OF maybe add some other fields here;
         return JSON.stringify(json);
     }
 
-    createPlayerDelayMessage() {
-        var json = <any>{};
+    createPlayerDelayMessage(): string {
+        var json: any = {};
         json.type = PLAYER_DELAY;
         return JSON.stringify(json);
     }
 
-    createSongRequestMessage() {
-        var json = <any>{};
+    createSongRequestMessage(): string {
+        var json: any = {};
         json.type = SONG_REQUEST;
         return JSON.stringify(json);
     }
 
-    createPlayMessage() {
-        var json = <any>{};
+    createPlayMessage(): string {
+        var json: any = {};
         json.type = PLAY;
         return JSON.stringify(json);
     }
 
-    createPauseMessage() {
-        var json = <any>{};
+    createPauseMessage(): string {
+        var json: any = {};
         json.type = PAUSE;
         return JSON.stringify(json);
     }
 
-    createSkipMessage() {
-        var json = <any>{};
+    createSkipMessage(): string {
+        var json: any = {};
         json.type = SKIP;
         return JSON.stringify(json);
     }
 
-    createBackMessage() {
-        var json = <any>{};
+    createBackMessage(): string {
+        var json: any = {};
         json.type = BACK;
+        return JSON.stringify(json);
+    }
+
+    public createIsPlayingRequestMessage(): string {
+        var json: any = {};
+        json.type = MessageFactory.IS_PLAYING_REQUEST;
         return JSON.stringify(json);
     }
 }

@@ -1,35 +1,50 @@
 import {Injectable} from "@angular/core";
-import {Master} from "../player/master";
+import {MessageFactory} from "../player/MessageFactory";
+import {WSocket} from "../player/WSocket";
+import {MessageHandler} from "../player/messageHandler";
 /**
  * Created by motation on 04.03.2017.
  */
 
 @Injectable()
 export class MasterService {
-    private master: Master;
+
+    private messageFactory: MessageFactory;
+    private wSocket: WSocket;
+    private messageHandler: MessageHandler;
 
     constructor() {
-        this.master = new Master();
+        this.messageFactory = new MessageFactory();
+        this.wSocket = new WSocket("8081");
+        this.messageHandler = new MessageHandler(this.wSocket, this.messageFactory);
     }
 
-    public sendBackwardSkip(): void {
-
+    pause(): void {
+        this.wSocket.send(this.messageFactory.createPauseMessage());
     }
 
-    public sendPlay(): void {
-        this.master.play();
+    public play(): void {
+        this.wSocket.send(this.messageFactory.createPlayMessage());
     }
 
-    public sendPause(): void {
-        this.master.pause();
+    public skip(): void {
+        this.wSocket.send(this.messageFactory.createSkipMessage());
     }
 
-    public sendSkip(): void {
-
+    public backward(): void {
+        this.wSocket.send(this.messageFactory.createBackMessage());
     }
 
-    public getPlayerState(): string {
-        //OF TODO get real state from backend
-        return "pause";
+    public isPlayingRequest(callback: Function): void {
+        //OF TODO work in progress....
+
+        // console.log("request play state");
+        // console.log(this.wSocket.connection.OPEN);
+        // console.log(this.wSocket.connection.CLOSING);
+        // console.log(this.wSocket.connection.CLOSED);
+        // console.log(this.wSocket.connection.readyState);
+        //
+        // let isPlaying = this.wSocket.send(this.messageFactory.createIsPlayingRequestMessage());
+        // this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
     }
 }

@@ -2,10 +2,10 @@ import http = require('http');
 import os = require('os');
 import finalhandler = require('finalhandler');
 import serveStatic = require('serve-static');
-import { WSocketServer } from './wSocketServer';
-import { MessageHandler } from './messageHandler';
-import { MessageFactory } from './messageFactory';
-import { Playlist } from './playlist';
+import {WSocketServer} from "./wSocketServer";
+import {MessageHandler} from "./messageHandler";
+import {MessageFactory} from "./messageFactory";
+import {Playlist} from "./playlist";
 
 
 const SONG_REQUEST = "song_request";
@@ -13,32 +13,32 @@ const RTT = "rtt";
 const PLAYER_DELAY = "player_delay";
 
 export class Server {
-    private static debug : boolean = true;
-    private static port : number = 8080;
+    private static debug: boolean = true;
+    private static port: number = 8080;
 
-    private timeInMs : number = 0;
-    private playedTime : number = 0;
-    private isPlaying : boolean = false;
-    private clientWSocket : WSocketServer;
-    private masterWSocket : WSocketServer;
+    private timeInMs: number = 0;
+    private playedTime: number = 0;
+    private isPlaying: boolean = false;
+    private clientWSocket: WSocketServer;
+    private masterWSocket: WSocketServer;
 
-    private messageHandler : MessageHandler;
-    private masterMessageHandler : MessageHandler;
-    private messageFactory : MessageFactory;
+    private messageHandler: MessageHandler;
+    private masterMessageHandler: MessageHandler;
+    private messageFactory: MessageFactory;
 
-    private playlist : Playlist;
-    private currSong : string = "/dusche.mp3";
+    private playlist: Playlist;
+    private currSong: string = "/dusche.mp3";
 
-    constructor(){
+    constructor() {
 
-        let serve           = serveStatic("./frontend/");   // Pfad zur index.html (typescript-ordner)     
-        let serveModules    = serveStatic("./");
-        let serveMp3        = serveStatic("./");
+        let serve = serveStatic("./frontend/");   // Pfad zur index.html (typescript-ordner)
+        let serveModules = serveStatic("./");
+        let serveMp3 = serveStatic("./");
 
-        var server = http.createServer(function(req, res) { // Todo: extra function fuer machen wie in handleRequest()
+        var server = http.createServer(function (req, res) { // Todo: extra function fuer machen wie in handleRequest()
             var done = finalhandler(req, res);
             if (req.url.indexOf(".mp3") > -1) {
-				console.log("mp3")
+                console.log("mp3")
                 serveMp3(req, res, done);
             } else if (req.url.indexOf("node_modules") > -1) {
                 serveModules(req, res, done);
@@ -66,28 +66,29 @@ export class Server {
         this.masterMessageHandler.addHandler("pause", this.handleBack);
         this.masterMessageHandler.addHandler("skip", this.handleSkip);
         this.masterMessageHandler.addHandler("back", this.handleBack);
+        this.masterMessageHandler.addHandler(MessageFactory.IS_PLAYING_REQUEST, this.handlePlayingState)
 
     }
 
-    originIsAllowed(origin) : boolean {
+    originIsAllowed(origin): boolean {
         return true;
-    }  
+    }
 
     handleSongRequest = (messageObj, connection) => {
-        if(this.isPlaying){
+        if (this.isPlaying) {
             var passed = (Date.now() - this.timeInMs) / 1000;
             console.log(SONG_REQUEST + "play");
             connection.send(this.messageFactory.createPlayMessage(this.currSong, passed));
-        }else{
+        } else {
             connection.send(this.messageFactory.createPauseMessage());
         }
-        
+
     }
 
     handleRTT = (messageObj, connection) => {
         console.log(RTT);
-        connection.send(this.messageFactory.createRTTMessage(messageObj));   
-    
+        connection.send(this.messageFactory.createRTTMessage(messageObj));
+
     }
 
     handlePlayerDelay = (messageObj, connection) => {
@@ -113,7 +114,7 @@ export class Server {
         this.playedTime = 0;
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
+        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed))
     }
 
     handleBack = (messageObj, connection) => {
@@ -121,10 +122,15 @@ export class Server {
         this.playedTime = 0;
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path,passed))
+        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed))
     }
 
-    public static log(message : string) {
+    handlePlayingState = (messageObj, connection) => {
+        connection.send(this.messageFactory.createPlayingStateMessage(this.isPlaying));
+
+    }
+
+    public static log(message: string) {
         if (this.debug) {
             console.log(message);
         }
