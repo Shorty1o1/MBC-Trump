@@ -24,8 +24,9 @@ export class HomeComponent {
     };
 
     ngAfterViewInit(): void {
-        let callback = (isPlaying: Boolean) => {
-            this.isPlaying = isPlaying;
+        let callback = (isPlayingObj) => {
+            // this.isPlaying = isPlaying;
+            this.isPlaying = isPlayingObj.isPlaying;
             this.updateToggleButton();
         }
         this.masterService.isPlayingRequest(callback);
@@ -50,6 +51,7 @@ export class HomeComponent {
     }
 
     private updateToggleButton(): void {
+        console.log("STATE " + this.isPlaying);
         let state = HomeComponent.PLAY_BUTTON_CLASS;
         if (this.isPlaying) {
             state = HomeComponent.PAUSE_BUTTON_CLASS;

@@ -28,7 +28,8 @@ export class MasterService {
     }
 
     public skip(): void {
-        this.wSocket.send(this.messageFactory.createSkipMessage());
+        console.log(this.wSocket.connection.readyState);
+        // this.wSocket.send(this.messageFactory.createSkipMessage());
     }
 
     public backward(): void {
@@ -37,14 +38,17 @@ export class MasterService {
 
     public isPlayingRequest(callback: Function): void {
         //OF TODO work in progress....
+        if (this.wSocket.connection.CONNECTING === this.wSocket.connection.CONNECTING) {
+            this.wSocket.connection.onopen = () => {
+                this.sendIsPlayingRequest(callback);
+            }
+        } else {
+            this.sendIsPlayingRequest(callback);
+        }
+    }
 
-        // console.log("request play state");
-        // console.log(this.wSocket.connection.OPEN);
-        // console.log(this.wSocket.connection.CLOSING);
-        // console.log(this.wSocket.connection.CLOSED);
-        // console.log(this.wSocket.connection.readyState);
-        //
-        // let isPlaying = this.wSocket.send(this.messageFactory.createIsPlayingRequestMessage());
-        // this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
+    private sendIsPlayingRequest(callback: Function) {
+        this.wSocket.send(this.messageFactory.createIsPlayingRequestMessage());
+        this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
     }
 }
