@@ -27,6 +27,7 @@ export class AppComponent {
         if (this.isMaster) {
             this.router.navigate(['./slave']);
         } else {
+            this.client.pause();
             this.router.navigate(['./master']);
         }
     }

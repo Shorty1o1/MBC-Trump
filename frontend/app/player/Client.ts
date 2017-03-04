@@ -91,16 +91,24 @@ export class Client {
     }
 
 
-    playPauseToggle() {
+    public playPauseToggle(): void {
         if (this.player.getState() === Player.PAUSE) {
             this.player.start();
         } else {
             this.player.pause();
         }
-        this.stateChangedEventFunction(this.player.getState());
     }
 
-    initTestAudio(src) {
+    public isPlaying(): Boolean {
+        return this.player.getState() === Player.PLAY;
+    }
+
+    public pause(): void {
+        this.player.pause();
+    }
+
+
+    private initTestAudio(src): void {
 
         this.player.setSource(this.serverAddress + src);
         console.log("Client source is set");

@@ -23,7 +23,7 @@ export class MasterComponent {
 
     };
 
-    ngAfterViewInit(): void {
+    private ngAfterViewInit(): void {
         let callback = (isPlayingObj) => {
             // this.isPlaying = isPlaying;
             this.isPlaying = isPlayingObj.isPlaying;
