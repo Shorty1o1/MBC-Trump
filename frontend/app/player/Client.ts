@@ -88,6 +88,10 @@ export class Client {
 
     handlePause = (messageObj) => {
         this.player.pause();
+        console.log("We are in handle Pause");
+        console.log(messageObj.source);
+        this.player.setSource(messageObj.source);
+
     }
 
 

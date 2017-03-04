@@ -80,7 +80,7 @@ export class Server {
             console.log(SONG_REQUEST + "play");
             connection.send(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
         } else {
-            connection.send(this.messageFactory.createPauseMessage());
+            connection.send(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
         }
 
     }
@@ -97,7 +97,7 @@ export class Server {
 
     handlePause = (messageObj, connection) => {
         this.playedTime = Date.now() - this.timeInMs;
-        this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage());
+        this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
         this.isPlaying = false;
     }
 
@@ -114,7 +114,12 @@ export class Server {
         this.playedTime = 0;
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed))
+        if(this.isPlaying){
+            this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+        }else if(!this.isPlaying){
+            this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
+        }
+        
     }
 
     handleBack = (messageObj, connection) => {
@@ -122,7 +127,11 @@ export class Server {
         this.playedTime = 0;
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed))
+        if(this.isPlaying){
+            this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+        }else if(!this.isPlaying){
+            this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
+        }
     }
 
     handlePlayingState = (messageObj, connection) => {

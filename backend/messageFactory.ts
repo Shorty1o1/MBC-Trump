@@ -24,9 +24,10 @@ export class MessageFactory {
         return JSON.stringify(json);
     }
 
-    createPauseMessage() {
+    createPauseMessage(song : string) {
         var json = <any>{};
         json.type = PAUSE;
+        json.source = song;
         return JSON.stringify(json);
     }
 
