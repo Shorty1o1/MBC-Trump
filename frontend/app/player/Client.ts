@@ -1,13 +1,11 @@
 ﻿import {WSocket} from "./WSocket";
 import {MessageFactory} from "./MessageFactory";
 import {Player} from "./Player";
-// client class doing some stuff
 import {MessageHandler} from "./messageHandler";
 
 
 export class Client {
     private wsocket: WSocket;
-    private messageFactory: MessageFactory;
     private player: Player;
     private messageHandler: MessageHandler;
     private rtt: number = 0;
@@ -19,10 +17,9 @@ export class Client {
     private serverAddress: string;
 
     constructor() {
-        this.messageFactory = new MessageFactory();
-        this.wsocket = new WSocket(window.location.port); // TODO -> sp�ter zu player
+        this.wsocket = new WSocket(window.location.port); // TODO -> spaeter zu player
 
-        this.messageHandler = new MessageHandler(this.wsocket, this.messageFactory);
+        this.messageHandler = new MessageHandler(this.wsocket);
 
         this.messageHandler.addHandler("rtt", this.handleRTTMessage);
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
@@ -44,17 +41,17 @@ export class Client {
     }
 
     sendRTT() {
-        var rttMessage = this.messageFactory.createRTTMessage();
+        var rttMessage = MessageFactory.createRTTMessage();
         this.wsocket.send(rttMessage);
     }
 
     sendPLAYER_DELAY() {
-        var playerDelayMessage = this.messageFactory.createPlayerDelayMessage();
+        var playerDelayMessage = MessageFactory.createPlayerDelayMessage();
         this.wsocket.send(playerDelayMessage);
     }
 
     sendSONG_REQUEST() {
-        var songRequestMessage = this.messageFactory.createSongRequestMessage();
+        var songRequestMessage = MessageFactory.createSongRequestMessage();
         this.wsocket.send(songRequestMessage);
     }
 

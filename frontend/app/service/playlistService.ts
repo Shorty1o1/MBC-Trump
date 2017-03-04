@@ -6,10 +6,8 @@ import {Http} from "@angular/http" // Todo weg
 export class PlaylistService {
 	private library : Artist [];
     private playlist: Song[];
-    private masterService: MasterService;
 
     constructor(private http:Http, private masterService: MasterService) {
-    	this.masterService = masterService;
         this.library = [];
         this.playlist = []
         // Todo: Master (oder masterservice? ) holen

@@ -10,32 +10,29 @@ import {Artist, Album, Song} from "./playlistService";
 
 @Injectable()
 export class MasterService {
-
-    private messageFactory: MessageFactory;
     private wSocket: WSocket;
     private messageHandler: MessageHandler;
 
     constructor() {
-        this.messageFactory = new MessageFactory();
         this.wSocket = new WSocket("8081");
-        this.messageHandler = new MessageHandler(this.wSocket, this.messageFactory);
+        this.messageHandler = new MessageHandler(this.wSocket);
     }
 
     pause(): void {
-        this.wSocket.send(this.messageFactory.createPauseMessage());
+        this.wSocket.send(MessageFactory.createPauseMessage());
     }
 
     public play(): void {
-        this.wSocket.send(this.messageFactory.createPlayMessage());
+        this.wSocket.send(MessageFactory.createPlayMessage());
     }
 
     public skip(): void {
         console.log(this.wSocket.connection.readyState);
-        // this.wSocket.send(this.messageFactory.createSkipMessage());
+        // this.wSocket.send(MessageFactory.createSkipMessage());
     }
 
     public backward(): void {
-        this.wSocket.send(this.messageFactory.createBackMessage());
+        this.wSocket.send(MessageFactory.createBackMessage());
     }
 
     public isPlayingRequest(callback: Function): void {
@@ -49,20 +46,22 @@ export class MasterService {
     }
 
     private sendIsPlayingRequest(callback: Function) {
-        this.wSocket.send(this.messageFactory.createIsPlayingRequestMessage());
+        this.wSocket.send(MessageFactory.createIsPlayingRequestMessage());
         this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
     }
 
     private sendSetSetPlaylist(songs: Song[]) {
-
+        this.wSocket.send(MessageFactory.createSetPlaylistMessage(songs));
     }
 
-    private sendGetPlaylistRequest() : void {
-
+    private sendGetPlaylistRequest(callback: Function) : void {
+        this.wSocket.send(MessageFactory.createPlaylistRequestMessage());
+        this.messageHandler.addHandler(MessageFactory.PLAYLIST_RESPONSE, callback);
     }
 
-    private sendGetLibraryRequest(): void{
-
+    private sendGetLibraryRequest(callback: Function): void{
+        this.wSocket.send(MessageFactory.createLibraryRequestMessage());
+        this.messageHandler.addHandler(MessageFactory.LIBRARY_RESPONSE, callback);        
     }
 
 }
