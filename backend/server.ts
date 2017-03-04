@@ -63,7 +63,7 @@ export class Server {
         this.messageHandler.addHandler("player_delay", this.handlePlayerDelay);
         this.messageHandler.addHandler("song_request", this.handleSongRequest);
         this.masterMessageHandler.addHandler("play", this.handlePlay);
-        this.masterMessageHandler.addHandler("pause", this.handleBack);
+        this.masterMessageHandler.addHandler("pause", this.handlePause);
         this.masterMessageHandler.addHandler("skip", this.handleSkip);
         this.masterMessageHandler.addHandler("back", this.handleBack);
         this.masterMessageHandler.addHandler(MessageFactory.IS_PLAYING_REQUEST, this.handlePlayingState)
@@ -78,7 +78,7 @@ export class Server {
         if (this.isPlaying) {
             var passed = (Date.now() - this.timeInMs) / 1000;
             console.log(SONG_REQUEST + "play");
-            connection.send(this.messageFactory.createPlayMessage(this.currSong, passed));
+            connection.send(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
         } else {
             connection.send(this.messageFactory.createPauseMessage());
         }
@@ -88,7 +88,6 @@ export class Server {
     handleRTT = (messageObj, connection) => {
         console.log(RTT);
         connection.send(this.messageFactory.createRTTMessage(messageObj));
-
     }
 
     handlePlayerDelay = (messageObj, connection) => {
@@ -99,14 +98,15 @@ export class Server {
     handlePause = (messageObj, connection) => {
         this.playedTime = Date.now() - this.timeInMs;
         this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage());
+        this.isPlaying = false;
     }
 
     handlePlay = (messageObj, connection) => {
         console.log("handle play by master");
         this.timeInMs = Date.now() - this.playedTime;
         var passed = (Date.now() - this.timeInMs) / 1000;
-
         this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+        this.isPlaying = true;
     }
 
     handleSkip = (messageObj, connection) => {
