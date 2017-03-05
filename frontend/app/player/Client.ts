@@ -2,6 +2,7 @@
 import {MessageFactory} from "./MessageFactory";
 import {Player} from "./Player";
 import {MessageHandler} from "./messageHandler";
+import {Song} from "../service/playlistService"
 
 
 export class Client {
@@ -15,9 +16,10 @@ export class Client {
     private firstTimeTemp: number = 0;
     private timeAtStartPlayerDelay: number = 0;
     private serverAddress: string;
-    private songIsPlaying;
+    private songIsPlaying : Song;
 
     constructor() {
+        this.songIsPlaying = new Song();
         this.wsocket = new WSocket(window.location.port); // TODO -> spaeter zu player
 
         this.messageHandler = new MessageHandler(this.wsocket);
@@ -121,7 +123,8 @@ export class Client {
         this.player.unmute();
     }
 
-    public getSong(){
+    public getSong(){        
+        console.log("Song: " + this.songIsPlaying.title)
         return this.songIsPlaying;
     }
 

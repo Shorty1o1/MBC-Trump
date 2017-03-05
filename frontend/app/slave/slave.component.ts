@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef} from "@angular/core";
 import {AppComponent} from "../app.component";
 import {Client} from "../player/Client";
+import {Song} from "../service/playlistService"
 
 @Component({
     selector: 'app-slave',
@@ -14,6 +15,7 @@ export class SlaveComponent {
 
     private client: Client;
     private albumCoverLink: string = "../trumpCover.png"
+    private currentSong: Song;
 
     @ViewChild('toggleButton')
     private toggleButton: ElementRef;
@@ -21,6 +23,8 @@ export class SlaveComponent {
 
     constructor(private app: AppComponent) {
         this.client = app.getClient();
+        this.currentSong = this.client.getSong();
+        console.log("Current title: " + this.currentSong.title)
     };
 
     private ngAfterViewInit(): void {
