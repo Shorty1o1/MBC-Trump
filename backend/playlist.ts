@@ -1,22 +1,17 @@
 
 export class Playlist{
+	private library = [];
 	private playlist = [];
 	private index = 0;
+	private name ="asdasd";
 
 	constructor(){
 		var fs = require('fs');
-		var artists = JSON.parse(fs.readFileSync('./mp3/artists.json', 'utf8'));
-
-		for (let artist of artists){
-			for(let album of artist.albums){
-				for(let song of album.songs){
-					this.playlist.push(song);
-				}
-			}
-		}
+		this.library = JSON.parse(fs.readFileSync('./mp3/artists.json', 'utf8'));
+		this.playlist = [];
 	}
 
-	getSong(){
+	getSong() {
 		return this.playlist[this.index];
 	}
 
@@ -36,5 +31,16 @@ export class Playlist{
 		}	
 	}
 
+	getLibrary(){
+		return this.library;
+	}
+
+	getPlaylist(){
+		return this.playlist;
+	}
+
+	setPlaylist(playlist){
+		this.playlist = JSON.parse(playlist);
+	}
 	
 }

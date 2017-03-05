@@ -1,15 +1,14 @@
 <h1 align="center">Add songs to playlist</h1>
-
     <hr />
 <div class="container-fluid">
     <div class="flexbox">
         <div id="artistBox" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
-                <h4>Artist</h4>
+            	<h4>Artist</h4>
             </div>            			
 			<input class="form-control" placeholder="Filter Artists" [(ngModel)]="artistFilter">
             <div class="list-group eintraege">
-                <div *ngFor="let artist of artists;">
+                <div *ngFor="let artist of getLibrary()">
 					<div class="list-group-item" *ngIf="artist.name.indexOf(artistFilter) > -1" (click)="setArtist(artist)" >
 						<span class="textfield">{{artist.name}}</span>
 						<span class="pull-right">
@@ -42,7 +41,7 @@
 
         <div id="songBox" class="panel panel-default panel-wizard col-lg-3">
             <div class="panel-heading">
-                <h4>Song</h4>
+            	<h4>Song</h4>
             </div>
 			<input class="form-control" placeholder="Filter Sons" [(ngModel)]="songFilter">
 		     <div class="list-group eintraege">
@@ -75,7 +74,7 @@
 		            </tr>
 		        </thead>
 		        <tbody>
-		            <tr *ngFor="let song of newPlayList;">
+		            <tr *ngFor="let song of getPlaylist()">
 		                <td width="33%">{{song.title}}</td>
 		                <td width="33%">{{song.album.artist.name}}</td>
 		                <td width="33%">

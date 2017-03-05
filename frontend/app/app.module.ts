@@ -10,13 +10,15 @@ import {FormsModule} from "@angular/forms";
 import {LocationStrategy, HashLocationStrategy} from "@angular/common";
 import {MasterService} from "./service/masterService";
 import {MasterComponent} from "./master/master.component";
+import {PlaylistService} from "./service/playlistService";
 
 @NgModule({
     imports: [BrowserModule, routing, HttpModule, FormsModule], //other modules the app depends on
     declarations: [AppComponent, AboutComponent, ChooserComponent, MasterComponent, SlaveComponent], // declare all derectives and components
     bootstrap: [AppComponent], // root component to bootstarp
-    providers: [MasterService, {provide: LocationStrategy, useClass: HashLocationStrategy}]
+    providers: [MasterService, PlaylistService, {provide: LocationStrategy, useClass: HashLocationStrategy}]
 })
+
 export class AppModule {
 }
 

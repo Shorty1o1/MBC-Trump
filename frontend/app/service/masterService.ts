@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {MessageFactory} from "../player/MessageFactory";
 import {WSocket} from "../player/WSocket";
 import {MessageHandler} from "../player/messageHandler";
+import {Artist, Album, Song} from "./playlistService";
+
 /**
  * Created by motation on 04.03.2017.
  */
@@ -53,5 +55,32 @@ export class MasterService {
 
     public connectWS(): void {
         this.wSocket = new WSocket("8081");
+    }
+
+    public sendSetSetPlaylist(songs: Song[]) {
+        this.wSocket.send(MessageFactory.createSetPlaylistMessage(songs));
+    }
+
+    public sendGetPlaylistRequest(callback: Function) : void {
+       
+        if (this.wSocket.connection.readyState === this.wSocket.connection.CONNECTING) {
+            this.wSocket.connection.onopen = () => {
+                 this.wSocket.send(MessageFactory.createPlaylistRequestMessage());
+            }
+        } else {
+             this.wSocket.send(MessageFactory.createPlaylistRequestMessage());            
+        }
+        this.messageHandler.addHandler(MessageFactory.PLAYLIST_RESPONSE, callback);
+    }
+
+    public sendGetLibraryRequest(callback: Function): void{
+        if (this.wSocket.connection.readyState === this.wSocket.connection.CONNECTING) {
+            this.wSocket.connection.onopen = () => {
+                this.wSocket.send(MessageFactory.createLibraryRequestMessage());   
+            }
+        } else {       
+            this.wSocket.send(MessageFactory.createLibraryRequestMessage());   
+        }
+        this.messageHandler.addHandler(MessageFactory.LIBRARY_RESPONSE, callback); 
     }
 }
