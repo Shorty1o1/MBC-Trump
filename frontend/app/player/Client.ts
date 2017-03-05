@@ -12,7 +12,7 @@ export class Client {
     private rtt: number = 0;
     private rttSum: number = 0;
     private rttCounter: number = 0;
-    private stateChangedEventFunction: Function;
+    private currentSongEventFunction: Function;
     private firstTimeTemp: number = 0;
     private timeAtStartPlayerDelay: number = 0;
     private serverAddress: string;
@@ -86,7 +86,7 @@ export class Client {
     handlePlay = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
-        this.songIsPlaying = messageObj.song;
+        this.currentSongEventFunction(messageObj.song);
         this.initAudio(messageObj.song.path, messageObj.time);
     }
 
@@ -94,8 +94,8 @@ export class Client {
         this.player.pause();
         console.log("We are in handle Pause");
         console.log(messageObj.song.path);
+        this.currentSongEventFunction(messageObj.song);
         this.player.setSource(messageObj.song.path);
-        this.songIsPlaying = messageObj.song;
     }
 
 
@@ -181,8 +181,8 @@ export class Client {
 
     }
 
-    addChangeEventHandler(callback: Function) {
-        this.stateChangedEventFunction = callback;
+    addCurrentSongEventHandler(callback : Function) {
+        this.currentSongEventFunction = callback;
     }
 }
 ;

@@ -23,8 +23,7 @@ export class SlaveComponent {
 
     constructor(private app: AppComponent) {
         this.client = app.getClient();
-        this.currentSong = this.client.getSong();
-        console.log("Current title: " + this.currentSong.title)
+        this.client.addCurrentSongEventHandler(this.handleCurrentSongEvent);
     };
 
     private ngAfterViewInit(): void {
@@ -44,5 +43,9 @@ export class SlaveComponent {
             state = SlaveComponent.PAUSE_BUTTON_CLASS;
         }
         this.toggleButton.nativeElement.className = state;
+    }
+
+    private handleCurrentSongEvent = (song : Song) => {
+        this.currentSong = song;
     }
 }
