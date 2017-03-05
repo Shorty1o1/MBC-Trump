@@ -122,7 +122,7 @@ export class Client {
     }
 
     public getSong(){
-        return this.
+        return this.songIsPlaying;
     }
 
     public isPlaying(): Boolean {
