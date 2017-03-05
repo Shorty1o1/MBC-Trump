@@ -111,6 +111,14 @@ export class Client {
         }
     }
 
+    public mute(): void {
+        this.player.mute();
+    }
+
+    public unmute():void{
+        this.player.unmute();
+    }
+
 
     public isPlaying(): Boolean {
         return this.player.getState() === Player.PLAY;

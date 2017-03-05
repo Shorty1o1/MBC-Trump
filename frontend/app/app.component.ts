@@ -26,10 +26,11 @@ export class AppComponent {
     changeMasterSlave() {
         console.log("Master-Slave-Change ")
         if (this.isMaster) {
+            this.client.unmute();
             this.masterService.releaseWS();
             this.router.navigate(['./slave']);
         } else {
-            this.client.pause();
+            this.client.mute();
             this.masterService.connectWS();
             this.router.navigate(['./master']);
         }
