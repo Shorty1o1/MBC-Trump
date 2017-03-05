@@ -10,7 +10,7 @@ const appRoutes: Routes = [
     {path: 'slave', component: SlaveComponent},
     {path: 'chooser', component: ChooserComponent},
     {path: 'about', component: AboutComponent},
-    {path: '', component: MasterComponent, pathMatch: 'full'} // redirect to master page on load
+    {path: '', component: SlaveComponent, pathMatch: 'full'} // redirect to master page on load
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

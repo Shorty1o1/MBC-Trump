@@ -13,7 +13,7 @@ export class AppComponent {
 
     private client = new Client();
 
-    private isMaster: boolean = true;
+    private isMaster: boolean = false;
 
     private router: Router;
 
