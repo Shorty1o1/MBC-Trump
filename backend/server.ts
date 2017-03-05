@@ -82,9 +82,9 @@ export class Server {
         if (this.isPlaying) {
             var passed = (Date.now() - this.timeInMs) / 1000;
             console.log(SONG_REQUEST + "play");
-            connection.send(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+            connection.send(this.messageFactory.createPlayMessage(this.playlist.getSong(), passed));
         } else {
-            connection.send(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
+            connection.send(this.messageFactory.createPauseMessage(this.playlist.getSong()));
         }
 
     }
@@ -101,7 +101,7 @@ export class Server {
 
     handlePause = (messageObj, connection) => {
         this.playedTime = Date.now() - this.timeInMs;
-        this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
+        this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong()));
         this.isPlaying = false;
     }
 
@@ -109,7 +109,7 @@ export class Server {
         console.log("handle play by master");
         this.timeInMs = Date.now() - this.playedTime;
         var passed = (Date.now() - this.timeInMs) / 1000;
-        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+        this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong(), passed));
         this.isPlaying = true;
     }
 
@@ -119,9 +119,9 @@ export class Server {
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
         if(this.isPlaying){
-            this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+            this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong(), passed));
         }else if(!this.isPlaying){
-            this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
+            this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong()));
         }
         
     }
@@ -132,9 +132,9 @@ export class Server {
         this.timeInMs = Date.now();
         var passed = (Date.now() - this.timeInMs) / 1000;
         if(this.isPlaying){
-            this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
+            this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong(), passed));
         }else if(!this.isPlaying){
-            this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
+            this.clientWSocket.sendToAll(this.messageFactory.createPauseMessage(this.playlist.getSong()));
         }
     }
 

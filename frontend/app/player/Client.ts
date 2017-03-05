@@ -15,6 +15,7 @@ export class Client {
     private firstTimeTemp: number = 0;
     private timeAtStartPlayerDelay: number = 0;
     private serverAddress: string;
+    private songIsPlaying;
 
     constructor() {
         this.wsocket = new WSocket(window.location.port); // TODO -> spaeter zu player
@@ -77,21 +78,22 @@ export class Client {
 
     handlePlayerDelayMessage = (messageObj) => {
         console.log("received PlayerDelayMessage");
-        this.initTestAudio(messageObj.source);
+        this.initTestAudio(messageObj.song.path);
     }
 
     handlePlay = (messageObj) => {
         this.firstTimeTemp = Date.now();
         console.log("received SongRequestMessage");
-        this.initAudio(messageObj.source, messageObj.time);
+        this.songIsPlaying = messageObj.song;
+        this.initAudio(messageObj.song.path, messageObj.time);
     }
 
     handlePause = (messageObj) => {
         this.player.pause();
         console.log("We are in handle Pause");
-        console.log(messageObj.source);
-        this.player.setSource(messageObj.source);
-
+        console.log(messageObj.song.path);
+        this.player.setSource(messageObj.song.path);
+        this.songIsPlaying = messageObj.song;
     }
 
 
@@ -119,6 +121,9 @@ export class Client {
         this.player.unmute();
     }
 
+    public getSong(){
+        return this.
+    }
 
     public isPlaying(): Boolean {
         return this.player.getState() === Player.PLAY;

@@ -22,24 +22,24 @@ export class MessageFactory {
         return JSON.stringify(messageObj);
     }
 
-    createPlayerDelayMessage(song: string) {
+    createPlayerDelayMessage(song) {
         var json = <any>{};
         json.type = PLAYER_DELAY;
-        json.source = song;
+        json.song = song;
         return JSON.stringify(json);
     }
 
-    createPauseMessage(song : string) {
+    createPauseMessage(song) {
         var json = <any>{};
         json.type = PAUSE;
-        json.source = song;
+        json.song = song;
         return JSON.stringify(json);
     }
 
-    createPlayMessage(src: string, time: number) {
+    createPlayMessage(song, time: number) {
         var json = <any>{};
         json.type = PLAY;
-        json.source = src;
+        json.song = song;
         json.time = time;
         return JSON.stringify(json);
     }
