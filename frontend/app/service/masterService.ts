@@ -14,8 +14,7 @@ export class MasterService {
     private messageHandler: MessageHandler;
 
     constructor() {
-        this.wSocket = new WSocket("8081");
-        this.messageHandler = new MessageHandler(this.wSocket);
+ 
     }
 
     pause(): void {
@@ -55,6 +54,7 @@ export class MasterService {
 
     public connectWS(): void {
         this.wSocket = new WSocket("8081");
+        this.messageHandler = new MessageHandler(this.wSocket);
     }
 
     public sendSetSetPlaylist(songs: Song[]) {
