@@ -22,6 +22,7 @@ export class SlaveComponent {
     private isPlaying: Boolean = false;
 
     constructor(private app: AppComponent) {
+        this.currentSong = new Song();
         this.client = app.getClient();
         this.client.addCurrentSongEventHandler(this.handleCurrentSongEvent);
     };
