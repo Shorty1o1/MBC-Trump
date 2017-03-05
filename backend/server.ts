@@ -68,6 +68,10 @@ export class Server {
         this.masterMessageHandler.addHandler("back", this.handleBack);
         this.masterMessageHandler.addHandler(MessageFactory.IS_PLAYING_REQUEST, this.handlePlayingState)
 
+        this.masterMessageHandler.addHandler(MessageFactory.LIBRARY_REQUEST, this.handleLibraryRequest);
+        this.masterMessageHandler.addHandler(MessageFactory.PLAYLIST_REQUEST, this.handlePlaylistRequest);
+        this.masterMessageHandler.addHandler(MessageFactory.SET_PLAYLIST, this.handleSetPlaylist)
+        this.messageHandler.addHandler(MessageFactory.PLAYLIST_REQUEST, this.handlePlaylistRequest);
     }
 
     originIsAllowed(origin): boolean {
@@ -127,7 +131,21 @@ export class Server {
 
     handlePlayingState = (messageObj, connection) => {
         connection.send(this.messageFactory.createPlayingStateMessage(this.isPlaying));
+    }
 
+    handleLibraryRequest =  (messageObj, connection) => {
+        connection.send(this.messageFactory.createLibraryResponseMessage(this.playlist.getLibrary()));
+    }
+
+    handleSetPlaylist = (messageObj, connection) => {
+        console.log("set playlist!");
+        console.log(messageObj.playlist);
+        this.playlist.setPlaylist(messageObj.playlist);
+        connection.send(this.messageFactory.createGetPlaylistResponseMessage(this.playlist.getPlaylist()));
+    }
+
+    handlePlaylistRequest =  (messageObj, connection) => {
+        connection.send(this.messageFactory.createGetPlaylistResponseMessage(this.playlist.getPlaylist()));
     }
 
     public static log(message: string) {

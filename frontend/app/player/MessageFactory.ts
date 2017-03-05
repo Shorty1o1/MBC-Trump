@@ -84,10 +84,17 @@ export class MessageFactory {
         return JSON.stringify(json);
     }
 
-    public static createSetPlaylistMessage(songs: Song[]): string {
+    public static createSetPlaylistMessage(songs: Song[]): string {  
+        function replacer(key,value)  {
+            if (key=="album") return undefined;
+            else return value;
+        }
+
         var json: any = {};
         json.type = MessageFactory.SET_PLAYLIST;
-        json.playlist = songs;
+        json.playlist = JSON.stringify(songs, replacer);
+        console.log(json.playlist);
         return JSON.stringify(json);
     }
 }
+

@@ -50,18 +50,30 @@ export class MasterService {
         this.messageHandler.addHandler(MessageFactory.IS_PLAYING_RESPONSE, callback);
     }
 
-    private sendSetSetPlaylist(songs: Song[]) {
+    public sendSetSetPlaylist(songs: Song[]) {
         this.wSocket.send(MessageFactory.createSetPlaylistMessage(songs));
     }
 
-    private sendGetPlaylistRequest(callback: Function) : void {
+    public sendGetPlaylistRequest(callback: Function) : void {
         this.wSocket.send(MessageFactory.createPlaylistRequestMessage());
-        this.messageHandler.addHandler(MessageFactory.PLAYLIST_RESPONSE, callback);
+        if (this.wSocket.connection.readyState === this.wSocket.connection.CONNECTING) {
+            this.wSocket.connection.onopen = () => {
+                this.messageHandler.addHandler(MessageFactory.PLAYLIST_RESPONSE, callback);
+            }
+        } else {
+                this.messageHandler.addHandler(MessageFactory.PLAYLIST_RESPONSE, callback);            
+        }
     }
 
-    private sendGetLibraryRequest(callback: Function): void{
+    public sendGetLibraryRequest(callback: Function): void{
         this.wSocket.send(MessageFactory.createLibraryRequestMessage());
-        this.messageHandler.addHandler(MessageFactory.LIBRARY_RESPONSE, callback);        
+        if (this.wSocket.connection.readyState === this.wSocket.connection.CONNECTING) {
+            this.wSocket.connection.onopen = () => {
+                this.messageHandler.addHandler(MessageFactory.LIBRARY_RESPONSE, callback);       
+            }
+        } else {
+            this.messageHandler.addHandler(MessageFactory.LIBRARY_RESPONSE, callback);        
+        }
     }
 
 }

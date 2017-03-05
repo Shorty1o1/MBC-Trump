@@ -44,4 +44,12 @@ export class ChooserComponent {
 	addArtistToPlaylist(artist : Artist){
 		this.playlistService.addArtistToPlaylist(artist);
 	}
+
+	getPlaylist() : Song[] {
+		return this.playlistService.getPlaylist();
+	}
+
+	getLibrary(): Artist[]{
+		return this.playlistService.getLibrary();
+	}
 };
