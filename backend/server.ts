@@ -13,7 +13,7 @@ const RTT = "rtt";
 const PLAYER_DELAY = "player_delay";
 
 export class Server {
-    private static debug: boolean = true;
+    private static debug: boolean = false;
     private static port: number = 8080;
 
     private timeInMs: number = 0;
@@ -38,7 +38,7 @@ export class Server {
         var server = http.createServer(function (req, res) { // Todo: extra function fuer machen wie in handleRequest()
             var done = finalhandler(req, res);
             if (req.url.indexOf("/mp3/") > -1) {
-                console.log("mp3")
+                Server.log("mp3")
                 serveMp3(req, res, done);
             } else if (req.url.indexOf("node_modules") > -1) {
                 serveModules(req, res, done);
@@ -60,7 +60,6 @@ export class Server {
         this.playlist = new Playlist();
 
         this.messageHandler.addHandler("rtt", this.handleRTT);
-        this.messageHandler.addHandler("player_delay", this.handlePlayerDelay);
         this.messageHandler.addHandler("song_request", this.handleSongRequest);
         this.masterMessageHandler.addHandler("play", this.handlePlay);
         this.masterMessageHandler.addHandler("pause", this.handlePause);
@@ -74,14 +73,14 @@ export class Server {
         this.messageHandler.addHandler(MessageFactory.PLAYLIST_REQUEST, this.handlePlaylistRequest);
     }
 
-    originIsAllowed(origin): boolean {
-        return true;
-    }
+    //originIsAllowed(origin): boolean {
+    //    return true;
+    //}
 
     handleSongRequest = (messageObj, connection) => {
         if (this.isPlaying) {
             var passed = (Date.now() - this.timeInMs) / 1000;
-            console.log(SONG_REQUEST + "play");
+            Server.log(SONG_REQUEST + "play");
             connection.send(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
         } else {
             connection.send(this.messageFactory.createPauseMessage(this.playlist.getSong().path));
@@ -90,13 +89,8 @@ export class Server {
     }
 
     handleRTT = (messageObj, connection) => {
-        console.log(RTT);
+        Server.log(RTT);
         connection.send(this.messageFactory.createRTTMessage(messageObj));
-    }
-
-    handlePlayerDelay = (messageObj, connection) => {
-        console.log(PLAYER_DELAY);
-        connection.send(this.messageFactory.createPlayerDelayMessage(this.currSong));
     }
 
     handlePause = (messageObj, connection) => {
@@ -106,7 +100,7 @@ export class Server {
     }
 
     handlePlay = (messageObj, connection) => {
-        console.log("handle play by master");
+        Server.log("handle play by master");
         this.timeInMs = Date.now() - this.playedTime;
         var passed = (Date.now() - this.timeInMs) / 1000;
         this.clientWSocket.sendToAll(this.messageFactory.createPlayMessage(this.playlist.getSong().path, passed));
@@ -147,14 +141,14 @@ export class Server {
     }
 
     handleSetPlaylist = (messageObj, connection) => {
-        console.log("set playlist!");
-        console.log(messageObj.playlist);
+        Server.log("set playlist!");
+        Server.log(messageObj.playlist);
         this.playlist.setPlaylist(messageObj.playlist);
         connection.send(this.messageFactory.createGetPlaylistResponseMessage(this.playlist.getPlaylist()));
     }
 
     handlePlaylistRequest =  (messageObj, connection) => {
-        console.log("playlistresponse!")
+        Server.log("playlistresponse!")
         connection.send(this.messageFactory.createGetPlaylistResponseMessage(this.playlist.getPlaylist()));
     }
 

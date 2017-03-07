@@ -12,7 +12,6 @@ export class MessageFactory {
     public static IS_PLAYING_RESPONSE: string = "is_playing_response";
     public static SONG_REQUEST: string = "song_request";
     public static RTT: string = "rtt";
-    public static PLAYER_DELAY: string = "player_delay";
     public static PAUSE: string = "pause";
     public static PLAY: string = "play";
     public static SKIP: string = "skip";
@@ -26,13 +25,6 @@ export class MessageFactory {
         var json: any = {};
         json.type = MessageFactory.RTT;
         json.sentTime = Date.now();
-        //OF maybe add some other fields here;
-        return JSON.stringify(json);
-    }
-
-    public static createPlayerDelayMessage(): string {
-        var json: any = {};
-        json.type = MessageFactory.PLAYER_DELAY;
         return JSON.stringify(json);
     }
 
@@ -93,7 +85,6 @@ export class MessageFactory {
         var json: any = {};
         json.type = MessageFactory.SET_PLAYLIST;
         json.playlist = JSON.stringify(songs, replacer);
-        console.log(json.playlist);
         return JSON.stringify(json);
     }
 }

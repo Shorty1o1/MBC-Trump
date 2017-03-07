@@ -1,8 +1,9 @@
+import { Server } from './server';
 
 export class WSocketServer{
-    callbackFunction : Function;
-    connections = [];
-    isMaster : number = 0;
+    private callbackFunction : Function;
+    private connections = [];
+    private isMaster : number = 0;
     constructor(httpServer, isMaster : number){
         var WebSocketServer = require('websocket').server;
         this.isMaster = isMaster;
@@ -31,7 +32,7 @@ export class WSocketServer{
         }else if(this.isMaster == 1){
             if(this.connections.length == 1 ){
                 var connection = request.reject();
-                console.log("Master request has been denied!!!!!!");
+                Server.log("Master request has been denied!!!!!!");
             }else{
                 var connection = request.accept('echo-protocol', request.origin);
                 this.connections.push(connection);

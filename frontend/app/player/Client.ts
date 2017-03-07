@@ -12,30 +12,25 @@ export class Client {
     private rttSum: number = 0;
     private rttCounter: number = 0;
     private stateChangedEventFunction: Function;
-    private firstTimeTemp: number = 0;
     private timeAtStartPlayerDelay: number = 0;
     private serverAddress: string;
 
     constructor() {
-        this.wsocket = new WSocket(window.location.port); // TODO -> spaeter zu player
+        this.wsocket = new WSocket(window.location.port);
 
         this.messageHandler = new MessageHandler(this.wsocket);
 
         this.messageHandler.addHandler("rtt", this.handleRTTMessage);
-        this.messageHandler.addHandler("player_delay", this.handlePlayerDelayMessage);
         this.messageHandler.addHandler("play", this.handlePlay);
         this.messageHandler.addHandler("pause", this.handlePause);
 
-        console.log("Client callback for receiving messages added");
         this.player = new Player();
 
         this.player.createAudioElem();
-        console.log("Client Audio element created");
 
         this.serverAddress = "http://" + window.location.hostname + ":" + window.location.port;
 
         this.wsocket.addConnectionOpenCallback((event) => {
-            console.log("Client Connection to server established");
             this.initRttAndDelay();
         });
     }
@@ -45,11 +40,6 @@ export class Client {
         this.wsocket.send(rttMessage);
     }
 
-    sendPLAYER_DELAY() {
-        var playerDelayMessage = MessageFactory.createPlayerDelayMessage();
-        this.wsocket.send(playerDelayMessage);
-    }
-
     sendSONG_REQUEST() {
         var songRequestMessage = MessageFactory.createSongRequestMessage();
         this.wsocket.send(songRequestMessage);
@@ -57,7 +47,6 @@ export class Client {
 
     initRttAndDelay() {
         this.sendRTT();
-        //this.sendPLAYER_DELAY();
     }
 
     handleRTTMessage = (messageObj) => {
@@ -71,36 +60,15 @@ export class Client {
         } else {
             this.sendSONG_REQUEST();
         }
-
-        console.log(this.rtt);
-    }
-
-    handlePlayerDelayMessage = (messageObj) => {
-        console.log("received PlayerDelayMessage");
-        this.initTestAudio(messageObj.source);
     }
 
     handlePlay = (messageObj) => {
-        this.firstTimeTemp = Date.now();
-        console.log("received SongRequestMessage");
         this.initAudio(messageObj.source, messageObj.time);
     }
 
     handlePause = (messageObj) => {
         this.player.pause();
-        console.log("We are in handle Pause");
-        console.log(messageObj.source);
         this.player.setSource(messageObj.source);
-
-    }
-
-
-    public playPauseToggle(): void {
-        if (this.player.getState() === Player.PAUSE) {
-            this.player.start();
-        } else {
-            this.player.pause();
-        }
     }
 
     public toggleMute(): void {
@@ -128,28 +96,6 @@ export class Client {
         this.player.pause();
     }
 
-
-    private initTestAudio(src): void {
-
-        this.player.setSource(this.serverAddress + src);
-        console.log("Client source is set");
-
-        this.player.mute();
-        this.player.start();
-        this.timeAtStartPlayerDelay = Date.now();
-
-
-        window.setTimeout(() => {
-            var delay: number = ((Date.now() - this.timeAtStartPlayerDelay) / 1000) - (this.player.getCurrentTime());
-            this.player.setDelay(delay);
-            this.player.pause();
-            this.player.unmute();
-            this.sendSONG_REQUEST();
-            console.log(delay);
-        }, 1000);
-
-    }
-
 //	  (   )
 //	  (   ) (
 //	   ) _   )
@@ -160,14 +106,11 @@ export class Client {
 
     initAudio(src, time) {
         this.player.setSource(this.serverAddress + src);
-        console.log("Client source is set");
 
         this.player.setTime(time + (this.rtt / 1000));
-        console.log("Client time is set");
 
         window.setTimeout(() => {
             this.player.start();
-            console.log(Date.now() - this.firstTimeTemp);
         }, 1000);
 
 

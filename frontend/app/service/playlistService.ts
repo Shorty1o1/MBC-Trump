@@ -7,15 +7,12 @@ export class PlaylistService {
 	private playlist: Song[];
 
 	constructor(private masterService: MasterService) {
-		console.log("constuctor plservice")
 		this.playlist = [];
 		this.library = [];
 		this.masterService.sendGetLibraryRequest(this.getLibraryCallback);
 	}
 
 	private getPlaylistCallback = (res) =>{
-		// Todo: gucken ob leer
-		console.log("Playlistcallback!")
 		var tempPlaylist = JSON.parse(res.playlist) as Song[] ;
 		this.playlist = [];
 		// Gucken in der library nach song mit der selben id
@@ -76,7 +73,6 @@ export class PlaylistService {
 	}
 
 	public addArtistToPlaylist(artist: Artist): void {
-		console.log("Artist to playlist: " + artist.name)
 		for(var i = 0; i < artist.albums.length; i++) {
 			this.addAlbumToPlaylist(artist.albums[i]);
 		}

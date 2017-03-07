@@ -3,7 +3,6 @@ export class Playlist{
 	private library = [];
 	private playlist = [];
 	private index = 0;
-	private name ="asdasd";
 
 	constructor(){
 		var fs = require('fs');

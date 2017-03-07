@@ -2,30 +2,16 @@ export class WSocket {
     connection : WebSocket;
     
     constructor(port:string){
-        this.connection = new WebSocket("ws://" + window.location.hostname + ":" + port, 'echo-protocol');
-        console.log("Created Websocket");
-    
-    
-        this.connection.onmessage = function(message) {
-            console.log("WSocket got a message from server");
-            console.log("WSocket" + message);
-        }
-
-        this.connection.onopen = function(message) {
-            console.log("Websocket to server is established");
-        }
-        
+        this.connection = new WebSocket("ws://" + window.location.hostname + ":" + port, 'echo-protocol');          
     }
     
     addConnectionOpenCallback = function(callback) {
         this.connection.onopen = function(event) {
             callback(event);
         }
-        console.log("WSocket Connection open callback added");
     }
     
     send(message) {
-        console.log("WSocket sending message: " + message);
         this.connection.send(message);
     }
 
@@ -33,6 +19,5 @@ export class WSocket {
         this.connection.onmessage = function(message) {
             callback(message);
         }
-        console.log("WSocket ReceiveCallback added");
     }
 }

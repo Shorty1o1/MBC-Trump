@@ -1,6 +1,5 @@
 export const SONG_REQUEST = "song_request";
 export const RTT = "rtt";
-export const PLAYER_DELAY = "player_delay";
 export const PAUSE = "pause";
 export const PLAY = "play";
 
@@ -20,13 +19,6 @@ export class MessageFactory {
 
     createRTTMessage(messageObj) {
         return JSON.stringify(messageObj);
-    }
-
-    createPlayerDelayMessage(song: string) {
-        var json = <any>{};
-        json.type = PLAYER_DELAY;
-        json.source = song;
-        return JSON.stringify(json);
     }
 
     createPauseMessage(song : string) {
@@ -52,7 +44,6 @@ export class MessageFactory {
     }
 
     createLibraryResponseMessage(library): string {
-        console.log(library);
         var json: any = {};
         json.type = MessageFactory.LIBRARY_RESPONSE;
         json.library = library;
@@ -60,7 +51,6 @@ export class MessageFactory {
     }
 
     createGetPlaylistResponseMessage(playlist): string{
-        console.log(playlist);
         var json: any = {};
         json.type = MessageFactory.PLAYLIST_RESPONSE;
         json.playlist = playlist;

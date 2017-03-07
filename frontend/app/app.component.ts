@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Platform} from "./player/Platform";
 import {Client} from "./player/Client";
 import {Router} from "@angular/router";
 import {MasterService} from "./service/masterService";
@@ -9,8 +8,6 @@ import {MasterService} from "./service/masterService";
     templateUrl: './app/app.component.html',
 })
 export class AppComponent {
-    private pf = new Platform();
-
     private client;
 
     private isMaster: boolean = false;
@@ -21,10 +18,7 @@ export class AppComponent {
         return this.client;
     }
 
-
-    // Todo:
     changeMasterSlave() {
-        console.log("Master-Slave-Change ")
         if (this.isMaster) {
             this.client.unmute();
             this.masterService.releaseWS();
@@ -42,6 +36,5 @@ export class AppComponent {
 
     constructor(router: Router, private masterService: MasterService) {
         this.router = router;
-        console.log("Hauptkomponente initialisiert!");
     }
 }

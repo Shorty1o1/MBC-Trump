@@ -13,20 +13,14 @@ export class MessageHandler {
 
     handleMessages(message) {
         if (message.data) {
-            if (message.data == "wrong message") {
-
-            }
-            console.log("Client Got message " + message.data);
             try {
                 var messageObj = MessageFactory.getMessage(message.data);
                 for (let handler of this.handler[messageObj.type]) {
                     handler(messageObj);
                 }
             } catch (err) {
-                console.log("ERROR: " + err);
+                //console.log("ERROR: " + err);
             }
-        } else {
-            console.log("Client No data in this message available");
         }
     }
 
@@ -35,9 +29,5 @@ export class MessageHandler {
             this.handler[messageType] = [];
         }
         this.handler[messageType].push(handler);
-    }
-
-    initRttAndDelay() {
-        console.log("geht nicht");
     }
 }
