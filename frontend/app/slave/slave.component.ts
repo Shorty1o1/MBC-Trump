@@ -1,7 +1,6 @@
 import {Component, ViewChild, ElementRef} from "@angular/core";
 import {AppComponent} from "../app.component";
 import {Client} from "../player/Client";
-import {and} from "@angular/router/src/utils/collection";
 
 @Component({
     selector: 'app-slave',
@@ -39,9 +38,13 @@ export class SlaveComponent {
     }
 
     private toggle(): void {
-        this.client.toggleMute();
-        this.isPlaying = !this.isPlaying;
-        this.updateToggleButton();
+        if (this.client.isPlaying()) {
+            this.client.toggleMute();
+            this.isPlaying = !this.isPlaying;
+            this.updateToggleButton();
+        } else {
+            alert("Zur Zeit wird keine Musik abgespielt.");
+        }
     }
 
     private updateToggleButton(): void {
