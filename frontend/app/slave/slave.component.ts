@@ -20,10 +20,11 @@ export class SlaveComponent {
     private isPlaying: Boolean = false;
 
     constructor(private app: AppComponent) {
-        this.client = app.getClient();
+        
     };
 
     private ngAfterViewInit(): void {
+        this.client = this.app.getClient();
         this.isPlaying = this.client.isPlaying();
         this.updateToggleButton();
     }

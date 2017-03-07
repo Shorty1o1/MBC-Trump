@@ -11,7 +11,7 @@ import {MasterService} from "./service/masterService";
 export class AppComponent {
     private pf = new Platform();
 
-    private client = new Client();
+    private client;
 
     private isMaster: boolean = false;
 
@@ -36,6 +36,9 @@ export class AppComponent {
         }
     }
 
+    private ngAfterViewInit(): void {
+        this.client = new Client();
+    }
 
     constructor(router: Router, private masterService: MasterService) {
         this.router = router;
