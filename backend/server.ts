@@ -37,7 +37,7 @@ export class Server {
 
         var server = http.createServer(function (req, res) { // Todo: extra function fuer machen wie in handleRequest()
             var done = finalhandler(req, res);
-            if (req.url.indexOf(".mp3") > -1) {
+            if (req.url.indexOf("/mp3/") > -1) {
                 console.log("mp3")
                 serveMp3(req, res, done);
             } else if (req.url.indexOf("node_modules") > -1) {

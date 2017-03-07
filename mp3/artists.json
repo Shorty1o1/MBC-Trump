@@ -58,5 +58,23 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Square Wave",
+    "id" : 4,
+    "albums": [
+      {
+        "title": "SoundFormats for everyone",
+        "id" : 4,
+        "songs": [
+          {
+            "title": "Fourier Square",
+            "length": "10:00",            
+            "path" : "/mp3/sound.wav",
+            "id" : 5
+          }
+        ]
+      }
+    ]
   }
 ]
