@@ -11,9 +11,9 @@ export class Client {
     private rtt: number = 0;
     private rttSum: number = 0;
     private rttCounter: number = 0;
-    private stateChangedEventFunction: Function;
     private timeAtStartPlayerDelay: number = 0;
     private serverAddress: string;
+    private stateChangeCallback: Function;
 
     constructor() {
         this.wsocket = new WSocket(window.location.port);
@@ -33,6 +33,10 @@ export class Client {
         this.wsocket.addConnectionOpenCallback((event) => {
             this.initRttAndDelay();
         });
+    }
+
+    public addStateChangeHandler(cb: Function): void {
+        this.stateChangeCallback = cb;
     }
 
     sendRTT() {
@@ -67,7 +71,7 @@ export class Client {
     }
 
     handlePause = (messageObj) => {
-        this.player.pause();
+        this.pause();
         this.player.setSource(messageObj.source);
     }
 
@@ -81,19 +85,34 @@ export class Client {
 
     public mute(): void {
         this.player.mute();
+        this.callStateChangeCallback();
     }
 
-    public unmute():void{
+    public unmute(): void {
         this.player.unmute();
+        this.callStateChangeCallback();
     }
 
+    public isMuted(): Boolean {
+        return this.player.isMuted();
+    }
 
     public isPlaying(): Boolean {
         return this.player.getState() === Player.PLAY;
     }
 
+    private callStateChangeCallback(): void {
+        this.stateChangeCallback();
+    }
+
+    public start(): void {
+        this.player.start();
+        this.callStateChangeCallback();
+    }
+
     public pause(): void {
         this.player.pause();
+        this.callStateChangeCallback();
     }
 
 //	  (   )
@@ -110,14 +129,10 @@ export class Client {
         this.player.setTime(time + (this.rtt / 1000));
 
         window.setTimeout(() => {
-            this.player.start();
+            this.start();
         }, 1000);
 
 
-    }
-
-    addChangeEventHandler(callback: Function) {
-        this.stateChangedEventFunction = callback;
     }
 }
 ;

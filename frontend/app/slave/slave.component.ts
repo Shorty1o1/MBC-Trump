@@ -20,19 +20,31 @@ export class SlaveComponent {
     private isPlaying: Boolean = false;
 
     constructor(private app: AppComponent) {
-        
+
     };
 
     private ngAfterViewInit(): void {
         this.client = this.app.getClient();
-        this.isPlaying = this.client.isPlaying();
+        this.client.addStateChangeHandler(this.handleStateChangedEvent);
+    }
+
+    private handleStateChangedEvent = () => {
+        if (this.client.isPlaying() && !this.client.isMuted()) {
+            this.isPlaying = true;
+        } else {
+            this.isPlaying = false;
+        }
         this.updateToggleButton();
     }
 
     private toggle(): void {
-        this.client.toggleMute();
-        this.isPlaying = !this.isPlaying;
-        this.updateToggleButton();
+        if (this.client.isPlaying()) {
+            this.client.toggleMute();
+            this.isPlaying = !this.isPlaying;
+            this.updateToggleButton();
+        } else {
+            alert("Zur Zeit wird keine Musik abgespielt.");
+        }
     }
 
     private updateToggleButton(): void {
