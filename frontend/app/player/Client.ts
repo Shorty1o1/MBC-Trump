@@ -15,6 +15,7 @@ export class Client {
     private firstTimeTemp: number = 0;
     private timeAtStartPlayerDelay: number = 0;
     private serverAddress: string;
+    private stateChangeCallback: Function;
 
     constructor() {
         this.wsocket = new WSocket(window.location.port); // TODO -> spaeter zu player
@@ -38,6 +39,10 @@ export class Client {
             console.log("Client Connection to server established");
             this.initRttAndDelay();
         });
+    }
+
+    public addStateChangeHandler(cb: Function): void {
+        this.stateChangeCallback = cb;
     }
 
     sendRTT() {
@@ -87,7 +92,7 @@ export class Client {
     }
 
     handlePause = (messageObj) => {
-        this.player.pause();
+        this.pause();
         console.log("We are in handle Pause");
         console.log(messageObj.source);
         this.player.setSource(messageObj.source);
@@ -113,19 +118,37 @@ export class Client {
 
     public mute(): void {
         this.player.mute();
+        this.callStateChangeCallback();
     }
 
-    public unmute():void{
+    public unmute(): void {
         this.player.unmute();
+        this.callStateChangeCallback();
     }
 
+    public isMuted(): Boolean {
+        return this.player.isMuted();
+    }
 
     public isPlaying(): Boolean {
         return this.player.getState() === Player.PLAY;
     }
 
+    private callStateChangeCallback(): void {
+        // if (this.stateChangeCallback) {
+        console.log("STATE HAS CHANGED");
+        this.stateChangeCallback();
+        // }
+    }
+
+    public start(): void {
+        this.player.start();
+        this.callStateChangeCallback();
+    }
+
     public pause(): void {
         this.player.pause();
+        this.callStateChangeCallback();
     }
 
 
@@ -166,7 +189,7 @@ export class Client {
         console.log("Client time is set");
 
         window.setTimeout(() => {
-            this.player.start();
+            this.start();
             console.log(Date.now() - this.firstTimeTemp);
         }, 1000);
 

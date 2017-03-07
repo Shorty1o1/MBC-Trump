@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef} from "@angular/core";
 import {AppComponent} from "../app.component";
 import {Client} from "../player/Client";
+import {and} from "@angular/router/src/utils/collection";
 
 @Component({
     selector: 'app-slave',
@@ -20,12 +21,20 @@ export class SlaveComponent {
     private isPlaying: Boolean = false;
 
     constructor(private app: AppComponent) {
-        
+
     };
 
     private ngAfterViewInit(): void {
         this.client = this.app.getClient();
-        this.isPlaying = this.client.isPlaying();
+        this.client.addStateChangeHandler(this.handleStateChangedEvent);
+    }
+
+    private handleStateChangedEvent = () => {
+        if (this.client.isPlaying() && !this.client.isMuted()) {
+            this.isPlaying = true;
+        } else {
+            this.isPlaying = false;
+        }
         this.updateToggleButton();
     }
 
